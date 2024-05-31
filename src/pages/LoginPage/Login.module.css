@@ -95,9 +95,9 @@ form .registerLink{
   color: rgb(255, 68, 0);
 }
 
-@media (max-width:400px){
-  .login-container{
-    width:auto;
+@media (max-width:500px){
+  .wrapper{
+    padding: 20px;
   }
   form{
     width: auto;
