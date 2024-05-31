@@ -75,8 +75,8 @@ form .signupButton{
   color: black;
   font-size: 15px;
 }
-form button:hover{
-  background-color: rgb(67, 67, 245);
+.signupButton:hover{
+  background-color: rgb(130, 130, 152);
   transition: 0.5s;
   color: white;
   box-shadow: 0 0 5px black;

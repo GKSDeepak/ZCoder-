@@ -9,7 +9,10 @@
   justify-content:space-between;
   align-items: center;
   font-size: 20px;
-  background: transparent;
+  background-color: rgb(8, 5, 5);
+  position: sticky;
+  top: 0%;
+  border-bottom: 1px solid rgb(45, 90, 139);
 }
 .hamburger-menu{
   position: absolute;
