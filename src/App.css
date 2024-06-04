@@ -1,7 +1,53 @@
-.app{
-  height: 100vh;
+/* .app{
+  height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
+  background-size: cover; 
+  background-repeat: repeat;
+  background: linear-gradient(#000,rgb(17, 0, 255),#000);
+}
+html,body,#root{
   
+  height: 100%;
+  width: 100%;
+}
+
+body{
+  background-size: cover; 
+  background-repeat: repeat; 
+} */
+
+
+
+
+
+
+
+:root{
+  --background-color:linear-gradient(#000,rgb(17, 0, 255),#000);
+}
+
+[data-theme="light"]{
+  --background-color:linear-gradient(rgb(95, 171, 247),rgb(255, 255, 255),rgb(95, 171, 247));
+}
+
+.App{
+  min-height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  background-size: cover; 
+  background-repeat: repeat;
+  background:var(--background-color); 
+}
+html,body,#root{
+  
+  height: 100%;
+  width: 100%;
+}
+
+body{
+  background-size: cover; 
+  background-repeat: repeat; 
 }
