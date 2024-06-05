@@ -17,3 +17,46 @@ a {
 li{
   list-style: none;
 }
+
+
+.Heading{
+   text-align: center;
+   text-shadow: 2px 2px  rgba(0,0,0,9) ;
+   color: aliceblue;
+
+}
+.list-container{
+  position: relative;
+  left:30%;
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  margin: 1rem;
+  max-width: 60%;
+  
+}
+.container-box{
+  text-align: center;
+  z-index: -1;
+
+}
+.list{
+  margin: 1rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 15px 35px rgba(0,0,0,9);
+position: relative;
+left:7%;
+  padding: 1rem;
+  background-color: rgb(0, 0, 0);
+  color: aliceblue;
+  
+  border-radius: 10px;
+  max-width: 50%;
+  text-align: center;
+
+}
+.list:hover{
+
+  position: relative;
+  bottom: 0.15rem;
+}
