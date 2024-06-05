@@ -1,11 +1,13 @@
 
 
 export const  userSignUp = async (req, res) => {
+    
     let {name, email, password, dateOfBirth} = req.body;
     name = name.trim();
     email = email.trim();
     password = password.trim();
     dateOfBirth = dateOfBirth.trim();
+
     //if any is empty
     if(!name||!email||!password||!dateOfBirth){
         res.json({
