@@ -39,6 +39,8 @@ import Nav from './components/Nav/Nav'
 import Signup from './pages/SignupPage/Signup'
 import Footer from './components/Footer/Footer'
 import Toggle from './components/Toggle/Toggle'
+import RequireAuth from './components/RequireAuth'
+import Contests from './pages/ContestPage/Contests'
 import './App.css'
 
 
@@ -57,12 +59,13 @@ const App = () => {
       <Nav/>
       
       <Routes>
+        <Route path='/contests' element={<Contests/>}/>
         <Route path='/' element={<Home/>}/>
         <Route path='/login' element={<Login/>}/> 
         <Route path='/signup' element={<Signup />}/>
         <Route path='/profile' element={<Profile/>}/>
       </Routes>
-      
+      {/*  <RequireAuth><Profile/></RequireAuth>*/}
       
         <Footer />
          

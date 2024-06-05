@@ -72,6 +72,9 @@ const Signup = () => {
     username:"",
     email:"",
     password:"",
+    dob: "", // date of birth
+    techStack: "", // tech stack
+    languages: "" // languages known
   });
   const handleInput=(e)=>{
     let name = e.target.name;
@@ -88,7 +91,7 @@ const Signup = () => {
     // localStorage.setItem("user",JSON.stringify(user));
     // setIsSigned(()=>{!isSigned});
     // localStorage.setItem("boolean",JSON.stringify(isSigned));
-    navigate("/");
+    navigate("/",{replace:true});
   };
   
 

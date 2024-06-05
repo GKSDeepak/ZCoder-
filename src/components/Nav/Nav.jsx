@@ -52,13 +52,14 @@ const Nav = () => {
   return (
       <div className="nav-bar">
         <div className="logo">
-          <h1>Z<span>coder</span></h1>
+          <NavLink to='/'><h1>Z<span>coder</span></h1></NavLink>
         </div>
         <div className="hamburger-menu" onClick={()=>{setMenuOpen(!menuOpen);}}>
           <a href="#" ><GiHamburgerMenu /></a>
         </div>
         
         <ul className={menuOpen?"open":""}>
+          <li><NavLink to='/profile'>Profile</NavLink></li>
           <li><NavLink to='/contests'>Contests</NavLink></li>
           <li><NavLink to='/practice'>Practice</NavLink></li>
           <li><NavLink to='/submissions'>Submissions</NavLink></li>
