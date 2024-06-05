@@ -1,0 +1,15 @@
+.container{
+  display: flex;
+  flex:1;
+  justify-content: center;
+  align-items: center;
+}
+.content{
+  background-color: black;
+  width: 400px;
+  height: 600px;
+  border: solid white;
+}
+p{
+  color: white;
+}

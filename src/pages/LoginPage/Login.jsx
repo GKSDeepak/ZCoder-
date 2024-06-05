@@ -59,7 +59,7 @@
 
 
 import React,{useContext,useState} from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate,NavLink} from 'react-router-dom'
 // import { UserContext } from '../../UserContext'
 import { FaUser,FaLock } from "react-icons/fa"
 // import './Login.css'
@@ -85,7 +85,7 @@ const Login = () => {
     e.preventDefault();
     await login(user)
     // handleLogin(user);
-    navigate("/");
+    navigate("/",{replace:true});
   };
 
   return (
@@ -106,7 +106,7 @@ const Login = () => {
               <button type="submit" className={styles.loginButton}>Login</button>
             
             <div className={styles.registerLink}>
-              <p>Don't have an account? <a href="./signup">Signup</a></p>
+              <p>Don't have an account? <NavLink to='/signup'>Signup</NavLink></p>
             </div>
             {error && <div className='error'>{error}</div>}
           </form>
