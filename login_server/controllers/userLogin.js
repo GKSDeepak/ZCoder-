@@ -1,6 +1,8 @@
+const user = require('../model/user')
+const bcrypt = require('bcrypt');
 
 
- export const userSignIn = async (req, res)=>{
+  const userSignIn = async (req, res)=>{
     let { email, password} = req.body;
     email = email.trim();
     password = password.trim();
@@ -61,3 +63,5 @@
          )
     }
 }
+
+module.exports = userSignIn

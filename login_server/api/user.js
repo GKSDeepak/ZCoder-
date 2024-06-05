@@ -1,78 +1,109 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router();
-const nodemailer = require('nodemailer')
-//unique string
-const {v4 : uuidv4} = require('uuid')
-require("dotenv").config()
-// password handle 
+const nodemailer = require('nodemailer');
+const { v4: uuidv4 } = require('uuid');
+require('dotenv').config();
 const bcrypt = require('bcrypt');
-const { userInfo } = require('os');
 
-const user = require('../model/user')
-const Userverification = require('../model/userVerification')
+const User = require('../model/user');
+const UserVerification = require('../model/userVerification');
 
 // controllers
-const {userEmailVerification} = require('../controllers/userEmailVerification')
-const {userSignIn} = require('../controllers/userLogin')
-const {userSignUp} = require('../controllers/userSignUp')
 const { userEmailVerification } = require('../controllers/userEmailVerification');
-const {sendVerificationEmail} = require('../controllers/sendVerificationEmail');
+const { userSignIn } = require('../controllers/userLogin');
+const userSignUp = require('../controllers/userSignUp');
+const { sendVerificationEmail } = require('../controllers/sendVerificationEmail');
 
-//path for static verified page, html page 
+// path for static verified page, html page
 const path = require('path');
-
-
 
 // node mailer transporter
 let transporter = nodemailer.createTransport({
-    service :  "gmail",
-    host : "smtp.gmail.com",
-    port : 587,
-    secure : false, // true for 465 
-    auth : {
-        user : process.env.AUTH_EMAIL,
-        pass : process.env.NODE_MAILER_PASS
-    }
-})
-// testing succes
-transporter.verify((error, success) => {
-    if(error){
-        console.log(error);
-    }
-    else {
-        console.log("ready for messages");
-        console.log(success);
-    }
-}
-)
+  service: 'gmail',
+  host: 'smtp.gmail.com',
+  port: 587,
+  secure: false, // true for 465
+  auth: {
+    user: process.env.AUTH_EMAIL,
+    pass: process.env.NODE_MAILER_PASS,
+  },
+});
 
+// testing success
+transporter.verify((error, success) => {
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('ready for messages');
+    console.log(success);
+  }
+});
 
 // ROUTES
 
-//signup
-router.post('/signup', userSignUp)
+// signup
+router.post('/signup', async (req, res) => {
+  try {
+    await userSignUp(req, res);
+  } catch (error) {
+    res.status(500).json({
+      status: 'failed',
+      message: 'An error occurred during signup',
+      error: error.message,
+    });
+  }
+});
 
 // email verification route
-router.get("/verify/:id/:uniqueString" , userEmailVerification)
+router.get('/verify/:userId/:uniqueString', async (req, res) => {
+  try {
+    await userEmailVerification(req, res);
+  } catch (error) {
+    res.status(500).json({
+      status: 'failed',
+      message: 'An error occurred during email verification',
+      error: error.message,
+    });
+  }
+});
 
 // verified route
-router.get("/verified", (req, res) => {
-    // a static html page that shows user is verified.
-    // res.sendFile(path.join(__dirname, "./../views/verify.html"));
-    // create a html page such that according to the parameters 
-   return res.json({
-    "status" : "verificatoin done",
-   })
-})
+router.get('/verified', (req, res) => {
+    try {
+      res.sendFile(path.join(__dirname, '../views/verify.html'));
+    } catch (error) {
+      res.status(500).json({
+        status: 'failed',
+        message: 'An error occurred during verification',
+        error: error.message,
+      });
+    }
+  });
 
+// verification failed route
+router.get('/verification/failed', (req, res) => {
+    try {
+      res.sendFile(path.join(__dirname, '../views/verificationFailed.html'));
+    } catch (error) {
+      res.status(500).json({
+        status: 'failed',
+        message: 'An error occurred during verification failure handling',
+        error: error.message,
+      });
+    }
+  });
 
-router.get("/verification/failed" , (req, res) => {
-    return res.json({
-        "status" : "verificatoin failed",
-       })
-})
-
-//signin
-router.post('/signin', userSignIn )
+// signin
+router.post('/signin', async (req, res) => {
+  try {
+    await userSignIn(req, res);
+  } catch (error) {
+    res.status(500).json({
+      status: 'failed',
+      message: 'An error occurred during signin',
+      error: error.message,
+    });
+  }
+});
 
 module.exports = router;
