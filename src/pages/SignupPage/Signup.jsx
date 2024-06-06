@@ -84,7 +84,7 @@ const Signup = () => {
     const success = await signup(user);
     if (success.status!="Failed") {
       console.log(success);
-      navigate("/");
+      navigate("/",{replace:true});
     }
   };
 
