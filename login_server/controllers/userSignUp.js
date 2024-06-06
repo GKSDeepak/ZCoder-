@@ -5,19 +5,27 @@ const  sendVerificationEmail  = require('./sendVerificationEmail');
 
 const userSignUp = async (req, res) => {
   try {
-    let { name, email, password, dateOfBirth } = req.body;
-    name = name.trim();
-    email = email.trim();
-    password = password.trim();
-    dateOfBirth = dateOfBirth.trim();
+
+    
+    let { username, email, password } = req.body;
+    // name = name.trim();
+    // email = email.trim();
+    // password = password.trim();
+    // dateOfBirth = dateOfBirth.trim();
 
     // Check if any field is empty
-    if (!name || !email || !password || !dateOfBirth) {
+    if (!username || !email || !password) {
       return res.json({
         status: "Failed",
-        message: "Enter all input fields"
+        message: "Enter all input fields",
+        entered : {
+          "why" : username,
+          username,
+          email,
+          password
+        }
       });
-    } else if (!/^[a-zA-Z\s]*$/.test(name)) { // Allow spaces in names
+    } else if (!/^[a-zA-Z\s]*$/.test(username)) { // Allow spaces in names
       return res.json({
         status: "Failed",
         message: "Invalid name entered"
@@ -26,11 +34,6 @@ const userSignUp = async (req, res) => {
       return res.json({
         status: "Failed",
         message: "Invalid email entered"
-      });
-    } else if (!new Date(dateOfBirth).getTime()) {
-      return res.json({
-        status: "Failed",
-        message: "Invalid DOB entered"
       });
     } else if (password.length < 8) {
       return res.json({
@@ -50,10 +53,9 @@ const userSignUp = async (req, res) => {
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         const newUser = new user({
-          name,
+          username,
           email,
           password: hashedPassword,
-          dateOfBirth,
           verified: false
         });
 
@@ -64,7 +66,7 @@ const userSignUp = async (req, res) => {
   } catch (err) {
     console.error(err);
     res.json({
-      status: "Failed",
+      status: "Failed_end",
       message: "An error occurred during the sign-up process"
     });
   }

@@ -1,29 +1,35 @@
-import { useState } from "react"
-import { useAuthContext } from "./useAuthContext"
+import { useState } from "react";
+import { useAuthContext } from "./useAuthContext";
 
 export const useSignup = () => {
-  const [error,setError] = useState(null)
-  const {dispatch} = useAuthContext()
+  const [error, setError] = useState(null);
+  const { dispatch } = useAuthContext();
+
   const signup = async (user) => {
-    setError(null)
-    const response = await fetch('/api/user/signup',{
-      method:'POST',
-      headers: {'Content-Type': 'application/json'},
-      body:JSON.stringify(user)
-    })
-    const data = await response.json()
-    
-    if(!response.ok){
-      setError(data.error)
-    }else{
-      //save user to local storage
-      localStorage.setItem("user",JSON.stringify(data))
+    setError(null);
+    try {
+      const response = await fetch('/user/signup', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+      });
 
-      //update auth context
-       dispatch({type:'login',payload:data})
+      const text = await response.text();
+      const data = text ? JSON.parse(text) : {};
+
+      if (!response.ok) {
+        setError(data.error || 'An error occurred during signup');
+        return false;
+      } else {
+        localStorage.setItem("user", JSON.stringify(data));
+        dispatch({ type: 'login', payload: data });
+        return true;
+      }
+    } catch (err) {
+      setError('An error occurred: ' + err.message);
+      return false;
     }
-    //dispatch({type:'login',payload:user})
-  }
-  return { signup,error}
+  };
 
-}
+  return { signup, error };
+};

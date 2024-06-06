@@ -4,7 +4,7 @@ const userSchema = mongoose.Schema({
     name:String,
     email:String,
     password:String,
-    dateOfBirth:Date,
+   // dateOfBirth:Date,
     verified:Boolean
 })
 

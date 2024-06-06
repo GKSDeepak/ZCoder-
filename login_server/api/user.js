@@ -10,7 +10,7 @@ const UserVerification = require('../model/userVerification');
 
 // controllers
 const { userEmailVerification } = require('../controllers/userEmailVerification');
-const { userSignIn } = require('../controllers/userLogin');
+const userSignIn  = require('../controllers/userLogin');
 const userSignUp = require('../controllers/userSignUp');
 const { sendVerificationEmail } = require('../controllers/sendVerificationEmail');
 
@@ -47,7 +47,7 @@ router.post('/signup', async (req, res) => {
     await userSignUp(req, res);
   } catch (error) {
     res.status(500).json({
-      status: 'failed',
+      status: 'failedd',
       message: 'An error occurred during signup',
       error: error.message,
     });
