@@ -47,12 +47,12 @@ router.post('/signup', async (req, res) => {
     await userSignUp(req, res);
     let { username, email, password } = req.body;
 
-    const result = user.findOne({username});
+    // const result = user.findOne({username});
 
-    res.json({
-      username,
-      email
-    })
+    // res.json({
+    //   username,
+    //   email
+    // })
     
   } catch (error) {
     res.status(500).json({
