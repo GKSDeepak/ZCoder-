@@ -45,6 +45,15 @@ transporter.verify((error, success) => {
 router.post('/signup', async (req, res) => {
   try {
     await userSignUp(req, res);
+    let { username, email, password } = req.body;
+
+    const result = user.findOne({username});
+
+    res.json({
+      username,
+      email
+    })
+    
   } catch (error) {
     res.status(500).json({
       status: 'failedd',

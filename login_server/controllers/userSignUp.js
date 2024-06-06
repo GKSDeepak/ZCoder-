@@ -61,6 +61,7 @@ const userSignUp = async (req, res) => {
 
         const result = await newUser.save();
         sendVerificationEmail(result, res);
+        
       }
     }
   } catch (err) {
