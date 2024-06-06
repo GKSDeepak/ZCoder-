@@ -32,6 +32,7 @@
 
 import React, { useState } from 'react'
  import { BrowserRouter,Routes,Route } from 'react-router-dom'
+ import useLocalStorage from 'use-local-storage'
  import Profile from './pages/ProfilePage/Profile'
 import Home from './pages/Home/Home'
 import Login from './pages/LoginPage/Login'
@@ -41,13 +42,16 @@ import Footer from './components/Footer/Footer'
 import Toggle from './components/Toggle/Toggle'
 import RequireAuth from './components/RequireAuth'
 import Contests from './pages/ContestPage/Contests'
+import Questions from './pages/PracticePage/Questions'
+import ProblemStatement from './pages/PracticePage/ProblemStatement'
 import './App.css'
 
 
 
 
+
 const App = () => {
-  const [isLight,setIsLight] = useState(false)
+  const [isLight,setIsLight] = useLocalStorage("isLight",false)
   const toggleTheme = () => {
     setIsLight(!isLight)
   }
@@ -59,8 +63,10 @@ const App = () => {
       <Nav/>
       
       <Routes>
-        <Route path='/contests' element={<Contests/>}/>
         <Route path='/' element={<Home/>}/>
+        <Route path='/contests' element={<Contests/>}/>
+        <Route path='/practice' element={<Questions/>}/>
+        <Route path="/problem/:contestId/:problemIndex" element={<ProblemStatement/>} />
         <Route path='/login' element={<Login/>}/> 
         <Route path='/signup' element={<Signup />}/>
         <Route path='/profile' element={<Profile/>}/>

@@ -196,11 +196,11 @@ span {
   }
   .nav-bar .active{
     border: none;
-    color: rgb(95, 171, 247);
+    color: var(--navbar-active);
   }
   .nav-bar a:not(.active):hover{
     
-    color:rgb(95, 171, 247);
+    color:var(--navbar-active);
   }
   
 }
