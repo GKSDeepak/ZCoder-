@@ -43,7 +43,7 @@ import Toggle from './components/Toggle/Toggle'
 import RequireAuth from './components/RequireAuth'
 import Contests from './pages/ContestPage/Contests'
 import Questions from './pages/PracticePage/Questions'
-import ProblemStatement from './pages/PracticePage/ProblemStatement'
+// import ProblemStatement from './pages/PracticePage/ProblemStatement'
 import './App.css'
 
 
@@ -66,7 +66,7 @@ const App = () => {
         <Route path='/' element={<Home/>}/>
         <Route path='/contests' element={<Contests/>}/>
         <Route path='/practice' element={<Questions/>}/>
-        <Route path="/problem/:contestId/:problemIndex" element={<ProblemStatement/>} />
+        {/* <Route path="/problem/:contestId/:problemIndex" element={<ProblemStatement/>} /> */}
         <Route path='/login' element={<Login/>}/> 
         <Route path='/signup' element={<Signup />}/>
         <Route path='/profile' element={<Profile/>}/>
