@@ -6,12 +6,13 @@ export const useLogin = () => {
   const {dispatch} = useAuthContext()
   const login = async (user) => {
     setError(null)
-    const response = await fetch('/api/user/signup',{
+    const response = await fetch('/user/signup',{
       method:'POST',
       headers: {'Content-Type': 'application/json'},
       body:JSON.stringify(user)
     })
-    const data = await response.json()
+    const text = await response.text();
+    const data = text ? JSON.parse(text) : {};
     
     if(!response.ok){
       setError(data.error)

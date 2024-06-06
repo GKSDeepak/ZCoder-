@@ -17,24 +17,24 @@ export const authReducer = (state,action) => {
       return state
   }
 }
-
 export const AuthContextProvider = ({ children }) => {
-  const [state,dispatch] = useReducer(authReducer,{
-    user:null,
-    isAuthenticated:false,
-  })
-  
-  //letting the react components know that the user is logged in after refreshing page
-  useEffect(()=>{
-    const user = JSON.parse(localStorage.getItem('user'))
-    if(user){
-      dispatch({type:'login',payload:user})
+  const [state, dispatch] = useReducer(authReducer, {
+    user: null,
+    isAuthenticated: false,
+  });
+
+  // Check only for isAuthenticated flag to avoid automatic login
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem('isAuthenticated');
+    if (isLoggedIn === 'true') {
+      dispatch({ type: 'login' });
     }
-  },[])
-  console.log('AuthContext state', state)
+  }, []);
+
+  console.log('AuthContext state', state);
 
   return (
-    <AuthContext.Provider value={{...state,dispatch}}>
+    <AuthContext.Provider value={{ ...state, dispatch }}>
       {children}
     </AuthContext.Provider>
   );
