@@ -16,14 +16,18 @@ export const useSignup = () => {
 
       const text = await response.text();
       const data = text ? JSON.parse(text) : {};
+      console.log(response);
+      console.log(text);
+        console.log(data);
 
       if (!response.ok) {
         setError(data.error || 'An error occurred during signup');
         return false;
       } else {
         localStorage.setItem("user", JSON.stringify(data));
+        
         dispatch({ type: 'login', payload: data });
-        return true;
+        return data;
       }
     } catch (err) {
       setError('An error occurred: ' + err.message);

@@ -192,7 +192,13 @@ form .signupButton {
   color: var(--signupButton-hover);
   /* box-shadow: 0 0 5px var(--bk-color); */
 }
-
+.error{
+  border: 1px solid red;
+  color: red;
+  background: transparent;
+  padding: 10px;
+  
+}
 
 @media (max-width:400px){
   .signup-container{
