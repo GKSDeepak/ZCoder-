@@ -7,22 +7,20 @@ const Questions = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const questionsPerPage = 100; // Number of questions to display per page
+  const questionsPerPage = 40; // Number of questions to display per page
 
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        const response = await fetch('https://codeforces.com/api/problemset.problems');
+        const response = await fetch(`https://alfa-leetcode-api.onrender.com/problems?limit=${10}`);
         const data = await response.json();
-        if (data.status === 'OK') {
-          console.log(data);
-          setProblems(data.result.problems);
-        } else {
-          setError('Failed to fetch problems');
-        }
+        // console.log(data);
+        // console.log(data.problemsetQuestionList);
+        setProblems(data.problemsetQuestionList);
       } catch (error) {
         setError('Failed to fetch problems');
-      } finally {
+      } 
+      finally {
         setLoading(false);
       }
     };
@@ -67,12 +65,12 @@ const Questions = () => {
     <div className="questions-list">
       {currentQuestions.map((problem, index) => (
         <div key={index} className="question-item">
-          <Link to={`/problem/${problem.contestId}/${problem.index}`}>
-            {problem.name}
+          <Link to={`/practice/${problem.titleSlug}`} >
+            {problem.title}
           </Link>
           <div className="tags">
-            {problem.tags.map((tag, tagIndex) => (
-              <span key={tagIndex} className="tag">{tag}</span>
+            {problem.topicTags.map((tag, tagIndex) => (
+              <span key={tagIndex} className="tag">{tag.name}</span>
             ))}
           </div>
         </div>
