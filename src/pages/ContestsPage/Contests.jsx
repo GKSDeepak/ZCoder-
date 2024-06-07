@@ -1,113 +1,67 @@
 import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import './Contests.css'; // Ensure this import statement is present
 
 const Contests = () => {
-    const [codeforcesContests, setCodeforcesContests] = useState([]);
-    const [clistContests, setClistContests] = useState([]);
+  const [contests, setContests] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-    useEffect(() => {
-        const fetchCodeforcesContests = async () => {
-            try {
-                const response = await fetch('https://codeforces.com/api/contest.list?phase=BEFORE');
-                const data = await response.json();
-                // Filter out contests that are in the "BEFORE" phase
-                const beforeContests = data.result.filter(contest => contest.phase === 'BEFORE');
-                setCodeforcesContests(beforeContests);
-            } catch (error) {
-                console.error('Error fetching codeforces contests:', error);
-            }
-        };
+  useEffect(() => {
+    const fetchContests = async () => {
+      const username = 'shraman1507';
+      const apiKey = '738ba004d8e3e434774b366ec26692422912b96f';
+      const currentDate = new Date().toISOString();
+      const url = `https://clist.by/api/v1/contest/?username=${username}&api_key=${apiKey}&start__gt=${currentDate}&resource__id__in=1,2,102,93&limit=10`;
 
-        const fetchClistContests = async () => {
-            try {
-                // Get the current date and time
-                const date = new Date();
-                let today = date.getDate();
-                if (today < 10) today = "0" + today;
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        setContests(data.objects);
+      } catch (error) {
+        setError(error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-                let month = date.getMonth() + 1;
-                if (month < 10) month = "0" + month;
+    fetchContests();
+  }, []);
 
-                const year = date.getFullYear();
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
-                let hours = date.getHours();
-                if (hours < 10) hours = "0" + hours;
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
-                let minutes = date.getMinutes();
-                if (minutes < 10) minutes = "0" + minutes;
-
-                let seconds = date.getSeconds();
-                if (seconds < 10) seconds = "0" + seconds;
-
-                // Construct the final API URL
-                const API = "https://clist.by:443/api/v4/contest/?host=leetcode.com";
-                const finalApi = `${API}&start__gt=${year}-${month}-${today} ${hours}:${minutes}:${seconds}`;
-
-                // Fetch the contests from the API
-                const response = await axios.get(finalApi, {
-                    headers: {
-                        'Authorization': `ApiKey shraman1507:738ba004d8e3e434774b366ec26692422912b96f` // Replace <YOUR_API_KEY> with your actual API key
-                    }
-                });
-                setClistContests(response.data.objects);
-            } catch (error) {
-                console.error('Error fetching clist contests:', error);
-            }
-        };
-
-        fetchCodeforcesContests();
-        fetchClistContests();
-    }, []);
-
-    return (
-        <>
-            <div>
-                <h1 className='Heading'>Codeforces Contests</h1>
-                <div className='container-box'>
-                    <div className='list-container'>
-                        <ul>
-                            {codeforcesContests.map(contest => (
-                                <div className='list' key={contest.id}>
-                                    <h2>{contest.name}</h2>
-                                    <div className='Time'>
-                                        <p>Start Time: </p>
-                                        <p>{new Date(contest.startTimeSeconds * 1000).toLocaleString()}</p>
-                                    </div>
-                                    <div className='duration'>
-                                        <p>Duration: </p>
-                                        <p>{contest.durationSeconds / 3600}</p>
-                                        <p> hours</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div>
-                <h1 className='Heading'>Clist Contests</h1>
-                <div className='container-box'>
-                    <div className='list-container'>
-                        <ul>
-                            {clistContests.map(contest => (
-                                <div className='list' key={contest.id}>
-                                    <h2>{contest.event}</h2>
-                                    <div className='Time'>
-                                        <p>Start Time: </p>
-                                        <p>{new Date(contest.start * 1000).toLocaleString()}</p>
-                                    </div>
-                                    <div className='duration'>
-                                        <p>Duration: </p>
-                                        <p>{contest.duration / 3600} hours</p>
-                                    </div>
-                                </div>
-                            ))}
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </>
-    );
+  return (
+    <div className="contests-container">
+      <h1 className="heading">Upcoming Contests</h1>
+      <div className="container-box">
+        <div className="list-container">
+          <ul>
+            {contests.map((contest) => (
+              <li key={contest.id} className="list">
+                <a href={contest.href} target="_blank" rel="noopener noreferrer" className="contest-link">
+                  <h2>{contest.event}</h2>
+                  <div className="time">
+                    <p>Start Time: {new Date(contest.start).toLocaleString()}</p>
+                  </div>
+                  <div className="duration">
+                    <p>Duration: {Math.floor(contest.duration / 3600)} hours</p>
+                  </div>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Contests;
