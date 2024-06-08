@@ -12,6 +12,7 @@ const userSignUp = async (req, res) => {
     // email = email.trim();
     // password = password.trim();
     // dateOfBirth = dateOfBirth.trim();
+    console.log(username, email);
 
     // Check if any field is empty
     if (!username || !email || !password) {

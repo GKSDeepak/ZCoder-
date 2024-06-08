@@ -16,6 +16,7 @@ const { sendVerificationEmail } = require('../controllers/sendVerificationEmail'
 
 // path for static verified page, html page
 const path = require('path');
+const { log } = require('console');
 
 // node mailer transporter
 let transporter = nodemailer.createTransport({
@@ -45,6 +46,7 @@ transporter.verify((error, success) => {
 router.post('/signup', async (req, res) => {
   try {
     await userSignUp(req, res);
+    //console.log({req});
   } catch (error) {
     res.status(500).json({
       status: 'failedd',

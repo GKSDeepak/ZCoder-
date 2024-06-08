@@ -2,6 +2,8 @@ const { v4: uuidv4 } = require('uuid');
 const bcrypt = require('bcrypt');
 const UserVerification = require('../model/userVerification');
 const nodemailer = require('nodemailer');
+const user = require('../model/user');
+
 
 // node mailer transporter
 let transporter = nodemailer.createTransport({
@@ -48,10 +50,27 @@ const sendVerificationEmail = async ({ _id, email }, res) => {
         // Send the verification email
         await transporter.sendMail(verificationMailOptions);
 
+        // res.json({
+        //     status: "Pending",
+        //     message: "Verification email sent. Please check your email to verify your account.",
+        //     id:_id
+        // });
+        const data = await user.find({ email });
+        if (data.length === 0) {
+            return res.json({
+                status: "Failed",
+                message: "Invalid credentials supplied."
+            });
+        }
+
+        // User exists
+        const userData = data[0];
+        console.log(userData);
         res.json({
-            status: "Pending",
-            message: "Verification email sent. Please check your email to verify your account."
-        });
+            userId : data[0]._id,
+            email : data[0].email
+        })
+
     } catch (error) {
         console.error(error);
         res.json({
