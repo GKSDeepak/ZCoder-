@@ -26,12 +26,21 @@ body{
 
 :root{
   --background-color:linear-gradient(#000,rgb(17, 0, 255),#000);
+  --loading-color:white;
 }
 
 [data-theme="light"]{
   --background-color:linear-gradient(rgb(95, 171, 247),rgb(255, 255, 255),rgb(95, 171, 247));
+  --loading-color:black;
 }
-
+.loading{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: var(--loading-color);
+  height: 100vh;
+}
 .App{
   min-height: 100%;
   width: 100%;
