@@ -19,7 +19,7 @@ export const useSignup = () => {
       console.log(response);
       console.log(text);
         console.log(data);
-
+      console.log(response.ok);
       if (!response.ok) {
         setError(data.error || 'An error occurred during signup');
         return false;

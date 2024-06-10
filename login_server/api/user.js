@@ -82,6 +82,8 @@ router.get('/verified', (req, res) => {
     }
   });
 
+  // this is new function
+
 // verification failed route
 router.get('/verification/failed', (req, res) => {
     try {

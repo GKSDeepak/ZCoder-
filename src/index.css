@@ -51,12 +51,9 @@ li{
   box-sizing: border-box;
   border: none;
 }
-/* html,body,#root{
-  
-  height: 100%;
-  width: 100%;
+/* *::-webkit-scrollbar {
+  display: none;  
 } */
-
 
 a {
   text-decoration: none;
