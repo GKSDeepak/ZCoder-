@@ -8,11 +8,11 @@ const userSignUp = async (req, res) => {
 
     
     let { username, email, password } = req.body;
-    // name = name.trim();
-    // email = email.trim();
-    // password = password.trim();
+    username = username.trim();
+    email = email.trim();
+    password = password.trim();
     // dateOfBirth = dateOfBirth.trim();
-    console.log(username, email);
+    // console.log(username, email);
 
     // Check if any field is empty
     if (!username || !email || !password) {
@@ -50,20 +50,36 @@ const userSignUp = async (req, res) => {
           message: "User with the provided email already exists"
         });
       } else {
-        // Password handling
         const saltRounds = 10;
         const hashedPassword = await bcrypt.hash(password, saltRounds);
         const newUser = new user({
           username,
           email,
-          password: hashedPassword,
+          password:hashedPassword,
           verified: false
         });
-
+        console.log('New user details before saving:', newUser);
         const result = await newUser.save();
+        console.log('User saved:', result);
+        res.json({
+          result
+        })
         sendVerificationEmail(result, res);
+        // Password handling
+        // const saltRounds = 10;
+        // const hashedPassword = await bcrypt.hash(password, saltRounds);
+        // const newUser = new user({
+        //   username,
+        //   email,
+        //   password:hashedPassword,
+        //   verified: false
+        // });
+
+        // const result = await newUser.save();
+        // sendVerificationEmail(result, res);
       }
     }
+    
   } catch (err) {
     console.error(err);
     res.json({

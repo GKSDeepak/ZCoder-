@@ -39,14 +39,14 @@ import './Nav.css'
 import { useLogout } from '../../hooks/useLogout'
 import { useAuthContext } from '../../hooks/useAuthContext'
 const Nav = () => {
-  // const {handleLogOut} = useContext(UserContext);
-  // const { isSigned, user,isLoggedIn } = useContext(UserContext);
   const [menuOpen, setMenuOpen] = useState(false)
   const {logout} = useLogout()
-  const {isAuthenticated,user} = useAuthContext()
+  const {isAuthenticated,userLogin,isEdit,user} = useAuthContext()
+
+  // const userInfo = JSON.parse(localStorage.getItem("user"));
+  // console.log(userInfo)
   // const { state, dispatch } = useContext(AuthContext)
   const handleLogOut = () =>{
-    // dispatch({type:'logout'})
     logout()
   }
   return (
@@ -59,24 +59,28 @@ const Nav = () => {
         </div>
         
         <ul className={menuOpen?"open":""}>
-          <li><NavLink to='/profile'>Profile</NavLink></li>
           <li><NavLink to='/contests'>Contests</NavLink></li>
           <li><NavLink to='/practice'>Practice</NavLink></li>
           <li><NavLink to='/submissions'>Submissions</NavLink></li>
           <li><NavLink to='/bookmarks'>Bookmarks</NavLink></li>
           
-          {
-            isAuthenticated ?
-            <>
-              <li><NavLink to='/profile'>{user.status}</NavLink></li>
-              <li><NavLink to='/login' onClick={handleLogOut}>Logout</NavLink></li>
-            </>
+           {
+            isAuthenticated ? 
+              <>
+                <li><NavLink to='/profile'>{userLogin.result.username}</NavLink></li>
+                <li><NavLink to='/login' onClick={handleLogOut}>Logout</NavLink></li>
+              </>
             :
-            <>
-              <li><NavLink to='/login'>Login</NavLink></li>
-              <li><NavLink to='/signup'>Signup</NavLink></li>
-            </>
-          }
+              <>
+                <li><NavLink to='/login'>Login</NavLink></li>
+                <li><NavLink to='/signup'>Signup</NavLink></li>
+              </>
+           }
+            
+          
+          
+            
+        
           
         </ul>
           

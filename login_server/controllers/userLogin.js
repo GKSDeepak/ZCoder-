@@ -2,12 +2,12 @@ const user = require('../model/user');
 const bcrypt = require('bcrypt');
 
 const userSignIn = async (req, res) => {
-    let { email, password } = req.body;
-    email = email.trim();
+    let { username, password } = req.body;
+    username = username.trim();
     password = password.trim();
 
-    // Check for empty email or password
-    if (!email || !password) {
+    // Check for empty username or password
+    if (!username || !password) {
         return res.json({
             status: "Failed",
             message: "Empty credentials supplied."
@@ -16,7 +16,7 @@ const userSignIn = async (req, res) => {
 
     try {
         // Check if user exists
-        const data = await user.find({ email });
+        const data = await user.find({ username });
         if (data.length === 0) {
             return res.json({
                 status: "Failed",
@@ -40,8 +40,8 @@ const userSignIn = async (req, res) => {
         if (isMatch) {
             return res.json({
                 status: "Success",
-                message: "Signi successful",
-                data: userData
+                message: "Signin successful",
+                result: userData
             });
         } else {
             return res.json({

@@ -15,19 +15,19 @@ export const useSignup = () => {
       });
 
       const text = await response.text();
-      const data = text ? JSON.parse(text) : {};
-      console.log(response);
-      console.log(text);
-        console.log(data);
-      console.log(response.ok);
+      const result = text ? JSON.parse(text) : {};
+      // console.log(response);
+      // console.log(text);
+        console.log(result);
+      // console.log(response.ok);
       if (!response.ok) {
-        setError(data.error || 'An error occurred during signup');
+        setError(result.error || 'An error occurred during signup');
         return false;
       } else {
-        localStorage.setItem("user", JSON.stringify(data));
-        
-        dispatch({ type: 'login', payload: data });
-        return data;
+        localStorage.setItem("user", JSON.stringify(result));
+        dispatch({ type: 'signup', payload: result });
+        // window.location.reload();
+        return true;
       }
     } catch (err) {
       setError('An error occurred: ' + err.message);

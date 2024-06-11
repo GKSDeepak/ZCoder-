@@ -1,29 +1,21 @@
-import React from 'react'
-import { useState } from 'react'
-import { useAuthContext } from '../../hooks/useAuthContext'
+// import React from 'react'
+// import { useState } from 'react'
+// import { useAuthContext } from '../../hooks/useAuthContext'
 
-const ProfileEdit = () => {
-  const {user} = useAuthContext()
-  const [newUser,setNewUser] = useState({
-    username:"",
-    email:"",
-    password:"",
-    dob: "", // date of birth
-    techStack: "", // tech stack
-    languages: "" // languages known
-
-    // username:user.username,
-    // email:user.username,
-    // password:user.username,
-    // dob: user.username, // date of birth
-    // techStack: user.username, // tech stack
-    // languages: user.username // languages known
-  })
-  return (
-    <div>
+// const ProfileEdit = () => {
+//   const {userLogin} = useAuthContext()
+//   const [updateUser,setUpdateUser] = useState({
+//     userId:`${userLogin.data._id}`,
+//     username:`${userLogin.data.username}`,
+//     dob: "", // date of birth
+//     techStack: "", // tech stack
+//     languages: "" // languages known
+//   })
+//   return (
+//     <div>
       
-    </div>
-  )
-}
+//     </div>
+//   )
+// }
 
-export default ProfileEdit
+// export default ProfileEdit

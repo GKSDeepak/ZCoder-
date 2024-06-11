@@ -65,27 +65,35 @@ import { FaUser,FaLock } from "react-icons/fa"
 // import './Login.css'
 import { useLogin } from '../../hooks/useLogin'
 import styles from './Login.module.css'
+import { useAuthContext } from '../../hooks/useAuthContext'
+
 
 const Login = () => {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   // const { handleLogin } = useContext(UserContext);
+  const {user} = useAuthContext()
   const {login ,error} = useLogin()
-  const [user,setUser] = useState({
+  const [user1,setUser] = useState({
     username:"",
     password:"",
   });
   const handleInput=(e)=>{
     let name = e.target.name;
     let value = e.target.value;
-    setUser({...user,
+    setUser({...user1,
       [name]:value,
     })
   };
   const handleSubmit= async (e)=>{
     e.preventDefault();
-    await login(user)
+    await login(user1)
     // handleLogin(user);
-    navigate("/",{replace:true});
+    // if(user.status!="Failed"){
+    //   navigate("/",{replace:true});
+    // }else{
+    //   alert(`${user.message}`);
+    // }
+    
   };
 
   return (
@@ -95,11 +103,11 @@ const Login = () => {
           <h1>LOGIN</h1>
           <form onSubmit={handleSubmit} action="">
             <div className={styles.inputBox}>
-              <input name="username" className={styles.input} type="text" placeholder='Username' required onChange={handleInput} value={user.username} />
+              <input name="username" className={styles.input} type="text" placeholder='Username' required onChange={handleInput} value={user1.username} />
               <FaUser className={styles.icon}/>
             </div>
             <div className={styles.inputBox}>
-              <input name="password" type="password" placeholder='Password' required onChange={handleInput} value={user.password} />
+              <input name="password" type="password" placeholder='Password' required onChange={handleInput} value={user1.password} />
               <FaLock className={styles.icon} />
             </div>
         

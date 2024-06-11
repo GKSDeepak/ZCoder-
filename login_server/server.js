@@ -12,7 +12,7 @@ app.use(bodyParser());
 app.use(express.urlencoded({extended:true}));
 app.use(cors());
 
-connectToMongoDb('mongodb://localhost:27017/login-server').then(()=>{
+connectToMongoDb('mongodb+srv://jajamabhijith2004:Devabhi2004@users.ralw0gb.mongodb.net/backend').then(()=>{
     console.log('mongo connecrted')
 })
 
