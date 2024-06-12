@@ -1,138 +1,123 @@
-import React from 'react'
-import './Home.css'
-const Home = () => {
+import React, { useState, useEffect } from 'react';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import axios from 'axios';
+import './Home.css';
+
+const HomePage = () => {
+  const [upcomingContests, setUpcomingContests] = useState([]);
+  const [recentlyCompletedContests, setRecentlyCompletedContests] = useState([]);
+  const [value, setValue] = useState(new Date());
+  const [selectedContest, setSelectedContest] = useState(null);
+  const [selectedDateContests, setSelectedDateContests] = useState([]);
+
+  useEffect(() => {
+    const fetchContests = async () => {
+      const username = 'shraman1507';
+      const apiKey = '738ba004d8e3e434774b366ec26692422912b96f';
+      const currentDate = new Date().toISOString();
+      const pastDate = new Date(new Date().setDate(new Date().getDate() - 30)).toISOString();
+
+      const upcomingUrl = `https://clist.by/api/v1/contest/?username=${username}&api_key=${apiKey}&start__gt=${currentDate}&resource__id__in=1,2,102,93&limit=10`;
+      const completedUrl = `https://clist.by/api/v1/contest/?username=${username}&api_key=${apiKey}&end__lt=${currentDate}&start__gt=${pastDate}&resource__id__in=1,2,102,93&limit=10`;
+
+      try {
+        const upcomingResponse = await axios.get(upcomingUrl);
+        setUpcomingContests(upcomingResponse.data.objects);
+
+        const completedResponse = await axios.get(completedUrl);
+        setRecentlyCompletedContests(completedResponse.data.objects);
+      } catch (error) {
+        console.error('Error fetching contests:', error);
+      }
+    };
+
+    fetchContests();
+  }, []);
+
+  const onDateClick = (date) => {
+    const contestsOnDate = upcomingContests.filter(
+      (contest) => new Date(contest.start).toDateString() === date.toDateString()
+    );
+    setSelectedDateContests(contestsOnDate);
+  };
+
   return (
-   <p>
-    Animals are multicellular, eukaryotic organisms in the biological kingdom Animalia With few exceptions, animals consume organic material, breathe oxygen, have myocytes and are able to move, can reproduce sexually, and grow from a hollow sphere of cells, the blastula, during embryonic development. Animals form a clade, meaning that they arose from a single common ancestor.
-
-Over 1.5 million living animal species have been described, of which around 1.05 million are insects, over 85,000 are molluscs, and around 65,000 are vertebrates. It has been estimated there are as many as 7.77 million animal species on Earth. Animal body lengths range from 8.5 μm (0.00033 in) to 33.6 m (110 ft). They have complex ecologies and interactions with each other and their environments, forming intricate food webs. The scientific study of animals is known as zoology, and the study of animal behaviors is known as ethology.
-
-Most living animal species belong to the infrakingdom Bilateria, a highly proliferative clade whose members have a bilaterally symmetric body plan. The vast majority belong to two large superphyla: the protostomes, which includes organisms such as the arthropods, molluscs, flatworms, annelids and nematodes; and the deuterostomes, which include the echinoderms, hemichordates and chordates, the latter of which contains the vertebrates. The simple Xenacoelomorpha have an uncertain position within Bilateria.
-
-Animals first appear in the fossil record in the late Cryogenian period, and diversified in the subsequent Ediacaran. Earlier evidence of animals is still controversial; the sponge-like organism Otavia has been dated back to the Tonian period at the start of the Neoproterozoic, but its identity as an animal is heavily contested.[5] Nearly all modern animal phyla became clearly established in the fossil record as marine species during the Cambrian explosion, which began around 539 million years ago (Mya), and most classes during the Ordovician radiation 485.4 Mya. 6,331 groups of genes common to all living animals have been identified; these may have arisen from a single common ancestor that lived about 650 Mya during the Cryogenian period.
-
-Historically, Aristotle divided animals into those with blood and those without. Carl Linnaeus created the first hierarchical biological classification for animals in 1758 with his Systema Naturae, which Jean-Baptiste Lamarck expanded into 14 phyla by 1809. In 1874, Ernst Haeckel divided the animal kingdom into the multicellular Metazoa (now synonymous with Animalia) and the Protozoa, single-celled organisms no longer considered animals. In modern times, the biological classification of animals relies on advanced techniques, such as molecular phylogenetics, which are effective at demonstrating the evolutionary relationships between taxa.
-
-Humans make use of many other animal species for food (including meat, eggs and dairy products), for materials (such as leather, fur and wool), as pets and as working animals for transportation, and services. Dogs, the first domesticated animal, have been used in hunting, in security and in warfare, as have horses, pigeons and birds of prey, while other terrestrial and aquatic animals are hunted for sports, trophies or profits. Non-human animals are also an important cultural element of human evolution, having appeared in cave arts and totems since the earliest times, and are frequently featured in mythology, religion, arts, literature, heraldry, politics and sports.
-
-Etymology
-The word animal comes from the Latin noun animal of the same meaning, which is itself derived from Latin animalis 'having breath or soul'.[6] The biological definition includes all members of the kingdom Animalia.[7] In colloquial usage, the term animal is often used to refer only to nonhuman animals.[8][9][10][11] The term metazoa is derived from Ancient Greek μετα (meta) 'after' (in biology, the prefix meta- stands for 'later') and ζῷᾰ (zōia) 'animals', plural of ζῷον zōion 'animal
-Animals are multicellular, eukaryotic organisms in the biological kingdom Animalia With few exceptions, animals consume organic material, breathe oxygen, have myocytes and are able to move, can reproduce sexually, and grow from a hollow sphere of cells, the blastula, during embryonic development. Animals form a clade, meaning that they arose from a single common ancestor.
-
-Over 1.5 million living animal species have been described, of which around 1.05 million are insects, over 85,000 are molluscs, and around 65,000 are vertebrates. It has been estimated there are as many as 7.77 million animal species on Earth. Animal body lengths range from 8.5 μm (0.00033 in) to 33.6 m (110 ft). They have complex ecologies and interactions with each other and their environments, forming intricate food webs. The scientific study of animals is known as zoology, and the study of animal behaviors is known as ethology.
-
-Most living animal species belong to the infrakingdom Bilateria, a highly proliferative clade whose members have a bilaterally symmetric body plan. The vast majority belong to two large superphyla: the protostomes, which includes organisms such as the arthropods, molluscs, flatworms, annelids and nematodes; and the deuterostomes, which include the echinoderms, hemichordates and chordates, the latter of which contains the vertebrates. The simple Xenacoelomorpha have an uncertain position within Bilateria.
-
-Animals first appear in the fossil record in the late Cryogenian period, and diversified in the subsequent Ediacaran. Earlier evidence of animals is still controversial; the sponge-like organism Otavia has been dated back to the Tonian period at the start of the Neoproterozoic, but its identity as an animal is heavily contested.[5] Nearly all modern animal phyla became clearly established in the fossil record as marine species during the Cambrian explosion, which began around 539 million years ago (Mya), and most classes during the Ordovician radiation 485.4 Mya. 6,331 groups of genes common to all living animals have been identified; these may have arisen from a single common ancestor that lived about 650 Mya during the Cryogenian period.
-
-Historically, Aristotle divided animals into those with blood and those without. Carl Linnaeus created the first hierarchical biological classification for animals in 1758 with his Systema Naturae, which Jean-Baptiste Lamarck expanded into 14 phyla by 1809. In 1874, Ernst Haeckel divided the animal kingdom into the multicellular Metazoa (now synonymous with Animalia) and the Protozoa, single-celled organisms no longer considered animals. In modern times, the biological classification of animals relies on advanced techniques, such as molecular phylogenetics, which are effective at demonstrating the evolutionary relationships between taxa.
-
-Humans make use of many other animal species for food (including meat, eggs and dairy products), for materials (such as leather, fur and wool), as pets and as working animals for transportation, and services. Dogs, the first domesticated animal, have been used in hunting, in security and in warfare, as have horses, pigeons and birds of prey, while other terrestrial and aquatic animals are hunted for sports, trophies or profits. Non-human animals are also an important cultural element of human evolution, having appeared in cave arts and totems since the earliest times, and are frequently featured in mythology, religion, arts, literature, heraldry, politics and sports.
-
-Etymology
-The word animal comes from the Latin noun animal of the same meaning, which is itself derived from Latin animalis 'having breath or soul'.[6] The biological definition includes all members of the kingdom Animalia.[7] In colloquial usage, the term animal is often used to refer only to nonhuman animals.[8][9][10][11] The term metazoa is derived from Ancient Greek μετα (meta) 'after' (in biology, the prefix meta- stands for 'later') and ζῷᾰ (zōia) 'animals', plural of ζῷον zōion 'animal
-Animals are multicellular, eukaryotic organisms in the biological kingdom Animalia With few exceptions, animals consume organic material, breathe oxygen, have myocytes and are able to move, can reproduce sexually, and grow from a hollow sphere of cells, the blastula, during embryonic development. Animals form a clade, meaning that they arose from a single common ancestor.
-
-Over 1.5 million living animal species have been described, of which around 1.05 million are insects, over 85,000 are molluscs, and around 65,000 are vertebrates. It has been estimated there are as many as 7.77 million animal species on Earth. Animal body lengths range from 8.5 μm (0.00033 in) to 33.6 m (110 ft). They have complex ecologies and interactions with each other and their environments, forming intricate food webs. The scientific study of animals is known as zoology, and the study of animal behaviors is known as ethology.
-
-Most living animal species belong to the infrakingdom Bilateria, a highly proliferative clade whose members have a bilaterally symmetric body plan. The vast majority belong to two large superphyla: the protostomes, which includes organisms such as the arthropods, molluscs, flatworms, annelids and nematodes; and the deuterostomes, which include the echinoderms, hemichordates and chordates, the latter of which contains the vertebrates. The simple Xenacoelomorpha have an uncertain position within Bilateria.
-
-Animals first appear in the fossil record in the late Cryogenian period, and diversified in the subsequent Ediacaran. Earlier evidence of animals is still controversial; the sponge-like organism Otavia has been dated back to the Tonian period at the start of the Neoproterozoic, but its identity as an animal is heavily contested.[5] Nearly all modern animal phyla became clearly established in the fossil record as marine species during the Cambrian explosion, which began around 539 million years ago (Mya), and most classes during the Ordovician radiation 485.4 Mya. 6,331 groups of genes common to all living animals have been identified; these may have arisen from a single common ancestor that lived about 650 Mya during the Cryogenian period.
-
-Historically, Aristotle divided animals into those with blood and those without. Carl Linnaeus created the first hierarchical biological classification for animals in 1758 with his Systema Naturae, which Jean-Baptiste Lamarck expanded into 14 phyla by 1809. In 1874, Ernst Haeckel divided the animal kingdom into the multicellular Metazoa (now synonymous with Animalia) and the Protozoa, single-celled organisms no longer considered animals. In modern times, the biological classification of animals relies on advanced techniques, such as molecular phylogenetics, which are effective at demonstrating the evolutionary relationships between taxa.
-
-Humans make use of many other animal species for food (including meat, eggs and dairy products), for materials (such as leather, fur and wool), as pets and as working animals for transportation, and services. Dogs, the first domesticated animal, have been used in hunting, in security and in warfare, as have horses, pigeons and birds of prey, while other terrestrial and aquatic animals are hunted for sports, trophies or profits. Non-human animals are also an important cultural element of human evolution, having appeared in cave arts and totems since the earliest times, and are frequently featured in mythology, religion, arts, literature, heraldry, politics and sports.
-
-Etymology
-The word animal comes from the Latin noun animal of the same meaning, which is itself derived from Latin animalis 'having breath or soul'.[6] The biological definition includes all members of the kingdom Animalia.[7] In colloquial usage, the term animal is often used to refer only to nonhuman animals.[8][9][10][11] The term metazoa is derived from Ancient Greek μετα (meta) 'after' (in biology, the prefix meta- stands for 'later') and ζῷᾰ (zōia) 'animals', plural of ζῷον zōion 'animal
-Animals are multicellular, eukaryotic organisms in the biological kingdom Animalia With few exceptions, animals consume organic material, breathe oxygen, have myocytes and are able to move, can reproduce sexually, and grow from a hollow sphere of cells, the blastula, during embryonic development. Animals form a clade, meaning that they arose from a single common ancestor.
-
-Over 1.5 million living animal species have been described, of which around 1.05 million are insects, over 85,000 are molluscs, and around 65,000 are vertebrates. It has been estimated there are as many as 7.77 million animal species on Earth. Animal body lengths range from 8.5 μm (0.00033 in) to 33.6 m (110 ft). They have complex ecologies and interactions with each other and their environments, forming intricate food webs. The scientific study of animals is known as zoology, and the study of animal behaviors is known as ethology.
-
-Most living animal species belong to the infrakingdom Bilateria, a highly proliferative clade whose members have a bilaterally symmetric body plan. The vast majority belong to two large superphyla: the protostomes, which includes organisms such as the arthropods, molluscs, flatworms, annelids and nematodes; and the deuterostomes, which include the echinoderms, hemichordates and chordates, the latter of which contains the vertebrates. The simple Xenacoelomorpha have an uncertain position within Bilateria.
-
-Animals first appear in the fossil record in the late Cryogenian period, and diversified in the subsequent Ediacaran. Earlier evidence of animals is still controversial; the sponge-like organism Otavia has been dated back to the Tonian period at the start of the Neoproterozoic, but its identity as an animal is heavily contested.[5] Nearly all modern animal phyla became clearly established in the fossil record as marine species during the Cambrian explosion, which began around 539 million years ago (Mya), and most classes during the Ordovician radiation 485.4 Mya. 6,331 groups of genes common to all living animals have been identified; these may have arisen from a single common ancestor that lived about 650 Mya during the Cryogenian period.
-
-Historically, Aristotle divided animals into those with blood and those without. Carl Linnaeus created the first hierarchical biological classification for animals in 1758 with his Systema Naturae, which Jean-Baptiste Lamarck expanded into 14 phyla by 1809. In 1874, Ernst Haeckel divided the animal kingdom into the multicellular Metazoa (now synonymous with Animalia) and the Protozoa, single-celled organisms no longer considered animals. In modern times, the biological classification of animals relies on advanced techniques, such as molecular phylogenetics, which are effective at demonstrating the evolutionary relationships between taxa.
-
-Humans make use of many other animal species for food (including meat, eggs and dairy products), for materials (such as leather, fur and wool), as pets and as working animals for transportation, and services. Dogs, the first domesticated animal, have been used in hunting, in security and in warfare, as have horses, pigeons and birds of prey, while other terrestrial and aquatic animals are hunted for sports, trophies or profits. Non-human animals are also an important cultural element of human evolution, having appeared in cave arts and totems since the earliest times, and are frequently featured in mythology, religion, arts, literature, heraldry, politics and sports.
-
-Etymology
-The word animal comes from the Latin noun animal of the same meaning, which is itself derived from Latin animalis 'having breath or soul'.[6] The biological definition includes all members of the kingdom Animalia.[7] In colloquial usage, the term animal is often used to refer only to nonhuman animals.[8][9][10][11] The term metazoa is derived from Ancient Greek μετα (meta) 'after' (in biology, the prefix meta- stands for 'later') and ζῷᾰ (zōia) 'animals', plural of ζῷον zōion 'animal
-Animals are multicellular, eukaryotic organisms in the biological kingdom Animalia With few exceptions, animals consume organic material, breathe oxygen, have myocytes and are able to move, can reproduce sexually, and grow from a hollow sphere of cells, the blastula, during embryonic development. Animals form a clade, meaning that they arose from a single common ancestor.
-
-Over 1.5 million living animal species have been described, of which around 1.05 million are insects, over 85,000 are molluscs, and around 65,000 are vertebrates. It has been estimated there are as many as 7.77 million animal species on Earth. Animal body lengths range from 8.5 μm (0.00033 in) to 33.6 m (110 ft). They have complex ecologies and interactions with each other and their environments, forming intricate food webs. The scientific study of animals is known as zoology, and the study of animal behaviors is known as ethology.
-
-Most living animal species belong to the infrakingdom Bilateria, a highly proliferative clade whose members have a bilaterally symmetric body plan. The vast majority belong to two large superphyla: the protostomes, which includes organisms such as the arthropods, molluscs, flatworms, annelids and nematodes; and the deuterostomes, which include the echinoderms, hemichordates and chordates, the latter of which contains the vertebrates. The simple Xenacoelomorpha have an uncertain position within Bilateria.
-
-Animals first appear in the fossil record in the late Cryogenian period, and diversified in the subsequent Ediacaran. Earlier evidence of animals is still controversial; the sponge-like organism Otavia has been dated back to the Tonian period at the start of the Neoproterozoic, but its identity as an animal is heavily contested.[5] Nearly all modern animal phyla became clearly established in the fossil record as marine species during the Cambrian explosion, which began around 539 million years ago (Mya), and most classes during the Ordovician radiation 485.4 Mya. 6,331 groups of genes common to all living animals have been identified; these may have arisen from a single common ancestor that lived about 650 Mya during the Cryogenian period.
-
-Historically, Aristotle divided animals into those with blood and those without. Carl Linnaeus created the first hierarchical biological classification for animals in 1758 with his Systema Naturae, which Jean-Baptiste Lamarck expanded into 14 phyla by 1809. In 1874, Ernst Haeckel divided the animal kingdom into the multicellular Metazoa (now synonymous with Animalia) and the Protozoa, single-celled organisms no longer considered animals. In modern times, the biological classification of animals relies on advanced techniques, such as molecular phylogenetics, which are effective at demonstrating the evolutionary relationships between taxa.
-
-Humans make use of many other animal species for food (including meat, eggs and dairy products), for materials (such as leather, fur and wool), as pets and as working animals for transportation, and services. Dogs, the first domesticated animal, have been used in hunting, in security and in warfare, as have horses, pigeons and birds of prey, while other terrestrial and aquatic animals are hunted for sports, trophies or profits. Non-human animals are also an important cultural element of human evolution, having appeared in cave arts and totems since the earliest times, and are frequently featured in mythology, religion, arts, literature, heraldry, politics and sports.
-
-Etymology
-The word animal comes from the Latin noun animal of the same meaning, which is itself derived from Latin animalis 'having breath or soul'.[6] The biological definition includes all members of the kingdom Animalia.[7] In colloquial usage, the term animal is often used to refer only to nonhuman animals.[8][9][10][11] The term metazoa is derived from Ancient Greek μετα (meta) 'after' (in biology, the prefix meta- stands for 'later') and ζῷᾰ (zōia) 'animals', plural of ζῷον zōion 'animal
-Animals are multicellular, eukaryotic organisms in the biological kingdom Animalia With few exceptions, animals consume organic material, breathe oxygen, have myocytes and are able to move, can reproduce sexually, and grow from a hollow sphere of cells, the blastula, during embryonic development. Animals form a clade, meaning that they arose from a single common ancestor.
-
-Over 1.5 million living animal species have been described, of which around 1.05 million are insects, over 85,000 are molluscs, and around 65,000 are vertebrates. It has been estimated there are as many as 7.77 million animal species on Earth. Animal body lengths range from 8.5 μm (0.00033 in) to 33.6 m (110 ft). They have complex ecologies and interactions with each other and their environments, forming intricate food webs. The scientific study of animals is known as zoology, and the study of animal behaviors is known as ethology.
-
-Most living animal species belong to the infrakingdom Bilateria, a highly proliferative clade whose members have a bilaterally symmetric body plan. The vast majority belong to two large superphyla: the protostomes, which includes organisms such as the arthropods, molluscs, flatworms, annelids and nematodes; and the deuterostomes, which include the echinoderms, hemichordates and chordates, the latter of which contains the vertebrates. The simple Xenacoelomorpha have an uncertain position within Bilateria.
-
-Animals first appear in the fossil record in the late Cryogenian period, and diversified in the subsequent Ediacaran. Earlier evidence of animals is still controversial; the sponge-like organism Otavia has been dated back to the Tonian period at the start of the Neoproterozoic, but its identity as an animal is heavily contested.[5] Nearly all modern animal phyla became clearly established in the fossil record as marine species during the Cambrian explosion, which began around 539 million years ago (Mya), and most classes during the Ordovician radiation 485.4 Mya. 6,331 groups of genes common to all living animals have been identified; these may have arisen from a single common ancestor that lived about 650 Mya during the Cryogenian period.
-
-Historically, Aristotle divided animals into those with blood and those without. Carl Linnaeus created the first hierarchical biological classification for animals in 1758 with his Systema Naturae, which Jean-Baptiste Lamarck expanded into 14 phyla by 1809. In 1874, Ernst Haeckel divided the animal kingdom into the multicellular Metazoa (now synonymous with Animalia) and the Protozoa, single-celled organisms no longer considered animals. In modern times, the biological classification of animals relies on advanced techniques, such as molecular phylogenetics, which are effective at demonstrating the evolutionary relationships between taxa.
-
-Humans make use of many other animal species for food (including meat, eggs and dairy products), for materials (such as leather, fur and wool), as pets and as working animals for transportation, and services. Dogs, the first domesticated animal, have been used in hunting, in security and in warfare, as have horses, pigeons and birds of prey, while other terrestrial and aquatic animals are hunted for sports, trophies or profits. Non-human animals are also an important cultural element of human evolution, having appeared in cave arts and totems since the earliest times, and are frequently featured in mythology, religion, arts, literature, heraldry, politics and sports.
-
-Etymology
-The word animal comes from the Latin noun animal of the same meaning, which is itself derived from Latin animalis 'having breath or soul'.[6] The biological definition includes all members of the kingdom Animalia.[7] In colloquial usage, the term animal is often used to refer only to nonhuman animals.[8][9][10][11] The term metazoa is derived from Ancient Greek μετα (meta) 'after' (in biology, the prefix meta- stands for 'later') and ζῷᾰ (zōia) 'animals', plural of ζῷον zōion 'animal
-Animals are multicellular, eukaryotic organisms in the biological kingdom Animalia With few exceptions, animals consume organic material, breathe oxygen, have myocytes and are able to move, can reproduce sexually, and grow from a hollow sphere of cells, the blastula, during embryonic development. Animals form a clade, meaning that they arose from a single common ancestor.
-
-Over 1.5 million living animal species have been described, of which around 1.05 million are insects, over 85,000 are molluscs, and around 65,000 are vertebrates. It has been estimated there are as many as 7.77 million animal species on Earth. Animal body lengths range from 8.5 μm (0.00033 in) to 33.6 m (110 ft). They have complex ecologies and interactions with each other and their environments, forming intricate food webs. The scientific study of animals is known as zoology, and the study of animal behaviors is known as ethology.
-
-Most living animal species belong to the infrakingdom Bilateria, a highly proliferative clade whose members have a bilaterally symmetric body plan. The vast majority belong to two large superphyla: the protostomes, which includes organisms such as the arthropods, molluscs, flatworms, annelids and nematodes; and the deuterostomes, which include the echinoderms, hemichordates and chordates, the latter of which contains the vertebrates. The simple Xenacoelomorpha have an uncertain position within Bilateria.
-
-Animals first appear in the fossil record in the late Cryogenian period, and diversified in the subsequent Ediacaran. Earlier evidence of animals is still controversial; the sponge-like organism Otavia has been dated back to the Tonian period at the start of the Neoproterozoic, but its identity as an animal is heavily contested.[5] Nearly all modern animal phyla became clearly established in the fossil record as marine species during the Cambrian explosion, which began around 539 million years ago (Mya), and most classes during the Ordovician radiation 485.4 Mya. 6,331 groups of genes common to all living animals have been identified; these may have arisen from a single common ancestor that lived about 650 Mya during the Cryogenian period.
-
-Historically, Aristotle divided animals into those with blood and those without. Carl Linnaeus created the first hierarchical biological classification for animals in 1758 with his Systema Naturae, which Jean-Baptiste Lamarck expanded into 14 phyla by 1809. In 1874, Ernst Haeckel divided the animal kingdom into the multicellular Metazoa (now synonymous with Animalia) and the Protozoa, single-celled organisms no longer considered animals. In modern times, the biological classification of animals relies on advanced techniques, such as molecular phylogenetics, which are effective at demonstrating the evolutionary relationships between taxa.
-
-Humans make use of many other animal species for food (including meat, eggs and dairy products), for materials (such as leather, fur and wool), as pets and as working animals for transportation, and services. Dogs, the first domesticated animal, have been used in hunting, in security and in warfare, as have horses, pigeons and birds of prey, while other terrestrial and aquatic animals are hunted for sports, trophies or profits. Non-human animals are also an important cultural element of human evolution, having appeared in cave arts and totems since the earliest times, and are frequently featured in mythology, religion, arts, literature, heraldry, politics and sports.
-
-Etymology
-The word animal comes from the Latin noun animal of the same meaning, which is itself derived from Latin animalis 'having breath or soul'.[6] The biological definition includes all members of the kingdom Animalia.[7] In colloquial usage, the term animal is often used to refer only to nonhuman animals.[8][9][10][11] The term metazoa is derived from Ancient Greek μετα (meta) 'after' (in biology, the prefix meta- stands for 'later') and ζῷᾰ (zōia) 'animals', plural of ζῷον zōion 'animal
-Animals are multicellular, eukaryotic organisms in the biological kingdom Animalia With few exceptions, animals consume organic material, breathe oxygen, have myocytes and are able to move, can reproduce sexually, and grow from a hollow sphere of cells, the blastula, during embryonic development. Animals form a clade, meaning that they arose from a single common ancestor.
-
-Over 1.5 million living animal species have been described, of which around 1.05 million are insects, over 85,000 are molluscs, and around 65,000 are vertebrates. It has been estimated there are as many as 7.77 million animal species on Earth. Animal body lengths range from 8.5 μm (0.00033 in) to 33.6 m (110 ft). They have complex ecologies and interactions with each other and their environments, forming intricate food webs. The scientific study of animals is known as zoology, and the study of animal behaviors is known as ethology.
-
-Most living animal species belong to the infrakingdom Bilateria, a highly proliferative clade whose members have a bilaterally symmetric body plan. The vast majority belong to two large superphyla: the protostomes, which includes organisms such as the arthropods, molluscs, flatworms, annelids and nematodes; and the deuterostomes, which include the echinoderms, hemichordates and chordates, the latter of which contains the vertebrates. The simple Xenacoelomorpha have an uncertain position within Bilateria.
-
-Animals first appear in the fossil record in the late Cryogenian period, and diversified in the subsequent Ediacaran. Earlier evidence of animals is still controversial; the sponge-like organism Otavia has been dated back to the Tonian period at the start of the Neoproterozoic, but its identity as an animal is heavily contested.[5] Nearly all modern animal phyla became clearly established in the fossil record as marine species during the Cambrian explosion, which began around 539 million years ago (Mya), and most classes during the Ordovician radiation 485.4 Mya. 6,331 groups of genes common to all living animals have been identified; these may have arisen from a single common ancestor that lived about 650 Mya during the Cryogenian period.
-
-Historically, Aristotle divided animals into those with blood and those without. Carl Linnaeus created the first hierarchical biological classification for animals in 1758 with his Systema Naturae, which Jean-Baptiste Lamarck expanded into 14 phyla by 1809. In 1874, Ernst Haeckel divided the animal kingdom into the multicellular Metazoa (now synonymous with Animalia) and the Protozoa, single-celled organisms no longer considered animals. In modern times, the biological classification of animals relies on advanced techniques, such as molecular phylogenetics, which are effective at demonstrating the evolutionary relationships between taxa.
-
-Humans make use of many other animal species for food (including meat, eggs and dairy products), for materials (such as leather, fur and wool), as pets and as working animals for transportation, and services. Dogs, the first domesticated animal, have been used in hunting, in security and in warfare, as have horses, pigeons and birds of prey, while other terrestrial and aquatic animals are hunted for sports, trophies or profits. Non-human animals are also an important cultural element of human evolution, having appeared in cave arts and totems since the earliest times, and are frequently featured in mythology, religion, arts, literature, heraldry, politics and sports.
-
-Etymology
-The word animal comes from the Latin noun animal of the same meaning, which is itself derived from Latin animalis 'having breath or soul'.[6] The biological definition includes all members of the kingdom Animalia.[7] In colloquial usage, the term animal is often used to refer only to nonhuman animals.[8][9][10][11] The term metazoa is derived from Ancient Greek μετα (meta) 'after' (in biology, the prefix meta- stands for 'later') and ζῷᾰ (zōia) 'animals', plural of ζῷον zōion 'animal
-Animals are multicellular, eukaryotic organisms in the biological kingdom Animalia With few exceptions, animals consume organic material, breathe oxygen, have myocytes and are able to move, can reproduce sexually, and grow from a hollow sphere of cells, the blastula, during embryonic development. Animals form a clade, meaning that they arose from a single common ancestor.
-
-Over 1.5 million living animal species have been described, of which around 1.05 million are insects, over 85,000 are molluscs, and around 65,000 are vertebrates. It has been estimated there are as many as 7.77 million animal species on Earth. Animal body lengths range from 8.5 μm (0.00033 in) to 33.6 m (110 ft). They have complex ecologies and interactions with each other and their environments, forming intricate food webs. The scientific study of animals is known as zoology, and the study of animal behaviors is known as ethology.
-
-Most living animal species belong to the infrakingdom Bilateria, a highly proliferative clade whose members have a bilaterally symmetric body plan. The vast majority belong to two large superphyla: the protostomes, which includes organisms such as the arthropods, molluscs, flatworms, annelids and nematodes; and the deuterostomes, which include the echinoderms, hemichordates and chordates, the latter of which contains the vertebrates. The simple Xenacoelomorpha have an uncertain position within Bilateria.
-
-Animals first appear in the fossil record in the late Cryogenian period, and diversified in the subsequent Ediacaran. Earlier evidence of animals is still controversial; the sponge-like organism Otavia has been dated back to the Tonian period at the start of the Neoproterozoic, but its identity as an animal is heavily contested.[5] Nearly all modern animal phyla became clearly established in the fossil record as marine species during the Cambrian explosion, which began around 539 million years ago (Mya), and most classes during the Ordovician radiation 485.4 Mya. 6,331 groups of genes common to all living animals have been identified; these may have arisen from a single common ancestor that lived about 650 Mya during the Cryogenian period.
-
-Historically, Aristotle divided animals into those with blood and those without. Carl Linnaeus created the first hierarchical biological classification for animals in 1758 with his Systema Naturae, which Jean-Baptiste Lamarck expanded into 14 phyla by 1809. In 1874, Ernst Haeckel divided the animal kingdom into the multicellular Metazoa (now synonymous with Animalia) and the Protozoa, single-celled organisms no longer considered animals. In modern times, the biological classification of animals relies on advanced techniques, such as molecular phylogenetics, which are effective at demonstrating the evolutionary relationships between taxa.
-
-Humans make use of many other animal species for food (including meat, eggs and dairy products), for materials (such as leather, fur and wool), as pets and as working animals for transportation, and services. Dogs, the first domesticated animal, have been used in hunting, in security and in warfare, as have horses, pigeons and birds of prey, while other terrestrial and aquatic animals are hunted for sports, trophies or profits. Non-human animals are also an important cultural element of human evolution, having appeared in cave arts and totems since the earliest times, and are frequently featured in mythology, religion, arts, literature, heraldry, politics and sports.
-
-Etymology
-The word animal comes from the Latin noun animal of the same meaning, which is itself derived from Latin animalis 'having breath or soul'.[6] The biological definition includes all members of the kingdom Animalia.[7] In colloquial usage, the term animal is often used to refer only to nonhuman animals.[8][9][10][11] The term metazoa is derived from Ancient Greek μετα (meta) 'after' (in biology, the prefix meta- stands for 'later') and ζῷᾰ (zōia) 'animals', plural of ζῷον zōion 'animal
-   </p>
+    <div className="homepage">
+      <header className="hero-section">
+        <h1 className="hero-title">Welcome to Contest Dashboard</h1>
+        <p className="hero-tagline">Stay updated with the latest and upcoming programming contests</p>
+      </header>
       
-      
-  )
-}
+      <section className="contests-section">
+        <div className="dropdown-container">
+          <h2 className="subheading">Recently Completed Contests</h2>
+          <select
+            className="contest-dropdown"
+            onChange={(e) => setSelectedContest(e.target.value)}
+          >
+            <option value="">Select a contest</option>
+            {recentlyCompletedContests.map((contest) => (
+              <option key={contest.id} value={contest.id}>
+                {contest.event} - {new Date(contest.start).toLocaleString()}
+              </option>
+            ))}
+          </select>
+          {selectedContest && (
+            <div className="contest-details">
+              <h3>Contest Details</h3>
+              <p>{recentlyCompletedContests.find(c => c.id === selectedContest).event}</p>
+              <p>
+                {new Date(
+                  recentlyCompletedContests.find(c => c.id === selectedContest).start
+                ).toLocaleString()}
+              </p>
+            </div>
+          )}
+        </div>
 
-export default Home
+        <div className="calendar-container">
+          <h2 className="subheading">Upcoming Contests</h2>
+          <Calendar
+            onChange={setValue}
+            value={value}
+            onClickDay={onDateClick}
+            tileContent={({ date, view }) => {
+              if (view === 'month') {
+                const contest = upcomingContests.find(
+                  (contest) => new Date(contest.start).toDateString() === date.toDateString()
+                );
+                return contest ? <div className="contest-dot"></div> : null;
+              }
+            }}
+          />
+          {selectedDateContests.length > 0 && (
+            <div className="selected-date-contests">
+              <h3>Contests on {value.toDateString()}</h3>
+              <ul>
+                {selectedDateContests.map((contest) => (
+                  <li key={contest.id}>
+                    <a href={contest.href} target="_blank" rel="noopener noreferrer">
+                      {contest.event} - {new Date(contest.start).toLocaleString()} (Duration: {Math.floor(contest.duration / 3600)} hours)
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <footer className="footer">
+        <p>&copy; 2024 Contest Dashboard. All Rights Reserved.</p>
+        <div className="social-links">
+          <a href="#">Facebook</a>
+          <a href="#">Twitter</a>
+          <a href="#">LinkedIn</a>
+        </div>
+      </footer>
+    </div>
+  );
+};
+
+export default HomePage;

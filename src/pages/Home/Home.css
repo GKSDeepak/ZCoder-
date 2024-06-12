@@ -1,3 +1,114 @@
-p{
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --bg-color: rgb(17, 0, 255);
+  --primary-color: #1e90ff;
+  --secondary-color: #f0f0f0;
+  --hover-color: rgb(130, 130, 152);
+}
+
+html, body {
+  background: linear-gradient(#000, var(--bg-color), #000); 
+  height: 100%;
+  width: 100%;
+  font-family: Arial, sans-serif;
+  color: var(--secondary-color);
+}
+
+.hero-section {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+}
+
+.hero-title {
+  font-size: 2.5rem;
   color: aliceblue;
+}
+
+.hero-tagline {
+  font-size: 1.25rem;
+  color: var(--primary-color);
+}
+
+.contests-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 2rem;
+  gap: 2rem;
+}
+
+.calendar-container, .dropdown-container {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  width: 45%;
+  text-align: center;
+}
+
+.contest-dot {
+  height: 5px;
+  width: 5px;
+  background-color: var(--primary-color);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.contest-dropdown {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: none;
+  background-color: var(--bg-color);
+  color: var(--secondary-color);
+  font-size: 1rem;
+  margin-bottom: 1rem;
+}
+
+.contest-details {
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 1rem;
+  border-radius: 5px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  margin-top: 1rem;
+}
+
+.contest-dropdown:hover, .contest-details {
+  background-color: var(--hover-color);
+  transition: background-color 0.3s;
+}
+
+.contest-details h3, .contest-details p {
+  margin: 0.5rem 0;
+}
+
+.footer {
+  text-align: center;
+  padding: 2rem;
+  background: rgba(0, 0, 0, 0.8);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  margin-top: 2rem;
+}
+
+.footer p {
+  color: var(--secondary-color);
+}
+
+.social-links a {
+  color: var(--secondary-color);
+  margin: 0 1rem;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.social-links a:hover {
+  color: var(--primary-color);
 }
