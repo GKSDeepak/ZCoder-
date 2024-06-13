@@ -1,15 +1,5 @@
 const mongoose = require('mongoose');
 
-// const commentSchema = new mongoose.Schema({
-//   text: String,
-//   createdAt: {
-//     type: Date,
-//     default: Date.now,
-//   },
-// });
-
-const Comment = mongoose.model('Comment', commentSchema);
-
 const solutionSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -55,4 +45,4 @@ const solutionSchema = new mongoose.Schema({
 
 const Solution = mongoose.model('Solution', solutionSchema);
 
-module.exports = { Solution, Comment };
+module.exports = Solution;
