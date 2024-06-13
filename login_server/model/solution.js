@@ -15,7 +15,7 @@ const solutionSchema = new mongoose.Schema({
   titleSlug: String,
   solution: String,
   language: String,
-  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment' }]
+  comments: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Comment', default:[] }]
 }, {
   timestamps: true
 });
