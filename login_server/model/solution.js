@@ -8,6 +8,8 @@ const mongoose = require('mongoose');
 //   },
 // });
 
+const Comment = mongoose.model('Comment', commentSchema);
+
 const solutionSchema = new mongoose.Schema({
   userId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -50,6 +52,7 @@ const solutionSchema = new mongoose.Schema({
   timestamps:true
 });
 
+
 const Solution = mongoose.model('Solution', solutionSchema);
 
-module.exports = Solution;
+module.exports = { Solution, Comment };

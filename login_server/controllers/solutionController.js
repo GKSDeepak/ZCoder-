@@ -7,10 +7,9 @@ const postSolution = async (req, res) => {
     if(newSolution.solution){
       await newSolution.save();
       res.status(201).json({ msg: 'Solution posted successfully' });
-    }else{
-      res.status(300).json({msg:'Nothing is posted'})
+    } else {
+      res.status(300).json({ msg: 'Nothing is posted' });
     }
-    
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -20,7 +19,7 @@ const postSolution = async (req, res) => {
 const getSolutionsByTitleSlug = async (req, res) => {
   const { titleSlug } = req.params;
   try {
-    const solutions = await Solution.find({ titleSlug });
+    const solutions = await Solution.find({ titleSlug }).populate('userId').populate('comments');
     res.status(200).json(solutions);
   } catch (error) {
     res.status(500).json({ error: error.message });
