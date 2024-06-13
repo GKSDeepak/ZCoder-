@@ -3,7 +3,8 @@ import { useParams } from 'react-router-dom';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import styles from './ProblemStatement.module.css'
-import { IoIosArrowDown,IoIosArrowUp } from "react-icons/io";
+import { IoIosArrowDown,IoIosArrowUp, IoMdBookmark } from "react-icons/io";
+import {useAuthContext} from '../../hooks/useAuthContext';
 
 const ProblemStatement = () => {
   const { titleSlug } = useParams();
@@ -17,6 +18,18 @@ const ProblemStatement = () => {
   const [activeSolution, setActiveSolution] = useState(null);
   const [comments, setComments] = useState({});
   const [commentInput, setCommentInput] = useState('');
+  const {userLogin} = useAuthContext();
+
+
+  const [bookmarks, setBookmarks] = useState(() => {
+    const storedBookmarks = localStorage.getItem('bookmarks');
+    return storedBookmarks? JSON.parse(storedBookmarks) : [];
+  });
+  
+  useEffect(() => {
+    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  }, [bookmarks]);
+
 
   useEffect(() => {
     const fetchProblemStatement = async () => {
@@ -41,6 +54,8 @@ const ProblemStatement = () => {
   const handleLanguageChange = (e) => {
     setLanguage(e.target.value);
   };
+
+
   const handlePostSolution = async () => {
      try{
       const response = await fetch('/user/solutions', {
@@ -48,7 +63,7 @@ const ProblemStatement = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ titleSlug, solution, language}),
+        body: JSON.stringify({ userId:userLogin.result._id, titleSlug, title:problem.questionTitle, solution, language, username:userLogin.result.username, topicTags: problem.topicTags}),
       });
       console.log(response);
       if (response.ok) {
@@ -63,13 +78,79 @@ const ProblemStatement = () => {
       alert('Error posting solution');
     }
   };
+
+
+
+
+  
+
+
+  const handleBookmark = async (sol) => {
+    // setIsBookmarked((prevIsBookmarked)=>!prevIsBookmarked);
+    // setBookmark(bookmark === sol._id ? null : sol._id);
+    const isBookmarked = bookmarks.includes(sol._id);
+    if(!isBookmarked){
+      
+      try {
+        const response = await fetch('/user/bookmarks', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            solutionId:sol._id,
+            userId:userLogin.result._id, 
+            title:problem.questionTitle,
+            titleSlug,
+            language: sol.language,
+            solution: sol.solution,
+            topicTags: problem.topicTags
+          }),
+        });
+        if (response.ok) {
+          setBookmarks((prevBookmarks) => [...prevBookmarks, sol._id]);
+          // setBookmark(sol._id)
+          alert('Solution bookmarked successfully');
+        } else {
+          alert('Failed to bookmark solution');
+        }
+      }catch (error) {
+          console.error('Error bookmarking solution', error);
+        }
+    }else{
+      try {
+        
+        const response = await fetch(`/user/bookmarks/${userLogin.result._id}/${titleSlug}/${sol._id}`, {
+          method: 'DELETE',
+        });
+      
+        if (response.ok) {
+          const responseBody = await response.json();
+          console.log('Response from server:', responseBody);
+          setBookmarks((prevBookmarks) => prevBookmarks.filter((id) => id!== sol._id));
+          alert('Solution unbookmarked successfully');
+        } else {
+          const errorResponse = await response.json();
+          console.error('Error unbookmarking solution:', errorResponse.error);
+          alert('Failed to unbookmark solution');
+        }
+      } catch (error) {
+        console.error('Error unbookmarking solution:', error);
+        alert('Failed to unbookmark solution');
+      }
+    } 
+  };
+    
+
+
+
   const fetchSolutions = async () => {
     if (showSolutions) {
       setShowSolutions(false);
       return;
     }
     try {
-      const response = await fetch(`http://localhost:8008/user/solutions/${titleSlug}`);
+      const response = await fetch(`/user/solutions/${titleSlug}`);
       const data = await response.json();
       console.log(data);
       setSolutions(data);
@@ -115,8 +196,9 @@ const ProblemStatement = () => {
               <div key={sol._id} className={styles.solutionItem}>
                 <div className={styles.solutionHeader} onClick={() => toggleSolution(sol._id)}>
                   <p><strong>Language used:</strong> {sol.language}</p>
-                  <p>Posted by:Devabhi</p>
+                  <p>Posted by:{sol.username}</p>
                   <p><strong>Posted at:</strong> {new Date(sol.createdAt).toLocaleString()}</p>
+                  <IoMdBookmark className={`${styles.icon} ${bookmarks.includes(sol._id)? styles.bookmarkIcon : ''}`} onClick={() => handleBookmark(sol)} />
                   {activeSolution === sol._id ? <IoIosArrowDown className={styles.icon}/> : <IoIosArrowUp className={styles.icon} /> }
                 </div>  
                 <div className={`${styles.solutionContent} ${activeSolution === sol._id ? styles.show : ''}`}>

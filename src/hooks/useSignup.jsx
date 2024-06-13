@@ -20,14 +20,14 @@ export const useSignup = () => {
       // console.log(text);
         console.log(result);
       // console.log(response.ok);
-      if (!response.ok) {
-        setError(result.error || 'An error occurred during signup');
-        return false;
-      } else {
+      if (result.status!=="Failed") {
         localStorage.setItem("user", JSON.stringify(result));
         dispatch({ type: 'signup', payload: result });
         // window.location.reload();
         return true;
+      } else {
+        alert(result.message);
+        return false;
       }
     } catch (err) {
       setError('An error occurred: ' + err.message);

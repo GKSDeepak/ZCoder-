@@ -19,7 +19,7 @@ export const useLogin = () => {
 
     if(userResponse.status!="Failed"){
       //save user to local storage
-      // localStorage.setItem("user",JSON.stringify(data))
+      localStorage.setItem("user",JSON.stringify(userResponse))
       console.log(userResponse)
       //update auth context
       // const data = localStorage.getItem("user")
