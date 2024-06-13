@@ -62,10 +62,8 @@ import { MdEmail } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import { useSignup } from '../../hooks/useSignup';
 import styles from './Signup.module.css';
-import { useAuthContext } from '../../hooks/useAuthContext';
 
 const Signup = () => {
-  // const {user} = useAuthContext()
   const navigate = useNavigate();
   const { signup, error } = useSignup();
   const [user, setUser] = useState({
@@ -82,9 +80,15 @@ const Signup = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const success = await signup(user);
-    if (success.status!="Failed") {
-      console.log(success);
-      navigate("/",{replace:true});
+    if (success) {
+      // console.log(success);
+      navigate("/login",{replace:true});
+      alert('successfully signed up');
+      setUser({
+        username: "",
+        email: "",
+        password: "",
+      });
     }
   };
 

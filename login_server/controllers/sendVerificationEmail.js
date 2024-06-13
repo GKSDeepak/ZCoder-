@@ -64,12 +64,12 @@ const sendVerificationEmail = async ({ _id, email }, res) => {
         }
 
         // User exists
-        const userData = data[0];
-        console.log(userData);
-        res.json({
-            userId : data[0]._id,
-            email : data[0].email
-        })
+        // const userData = data[0];
+        // console.log(userData);
+        // res.json({
+        //     userId : data[0]._id,
+        //     email : data[0].email
+        // })
 
     } catch (error) {
         console.error(error);

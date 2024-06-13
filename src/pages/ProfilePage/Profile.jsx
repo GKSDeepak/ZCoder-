@@ -1,18 +1,29 @@
 import React,{useContext} from 'react'
 import styles from './Profile.module.css'
-import { useAuthContext } from '../../hooks/useAuthContext'
-import { Navigate } from 'react-router-dom'
+// import { useAuthContext } from '../../hooks/useAuthContext'
+// import { useNavigate } from 'react-router-dom'
 const Profile = () => {
-  const {isAuthenticated,user} = useAuthContext()
-  // const navigate = Navigate()
+  // const {userLogin,isEdit,updatedUser} = useAuthContext()
+  // const navigate = useNavigate()
   return (
     
-    <>
+    
     
     <div className={styles.container}>
       <div className={styles.content}>
-        {/* <p>{user.username}</p>
-        <p>{user.email}</p> */}
+        {/* {
+            !isEdit ? 
+              <>
+                <p>{userLogin.data.username}</p>
+                <p>{userLogin.data.email}</p>
+              </>
+            :
+              <>
+                <p>{updatedUser.data.username}</p>
+                <p>{updatedUser.data.email}</p>
+              </>
+        } */}
+        
         {/* <div className="userInfo">
             <p>Username:dev</p>
             <p>Email: dev</p>
@@ -27,11 +38,11 @@ const Profile = () => {
         {/* </div>
         <div className="ratings">
 
-        </div>
-        <button onClick={()=>navigate('/profile/edit')}className="edit">Edit Profile</button> */}
+        </div>*/}
+        {/* <button onClick={()=>navigate('/profile/edit')}className="edit">Edit Profile</button>  */}
       </div>
     </div>
-    </>
+  
   )
 }
 

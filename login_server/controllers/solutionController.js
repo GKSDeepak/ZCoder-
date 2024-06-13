@@ -1,45 +1,15 @@
-// const Solution = require('../model/solution');
-
-// const postSolution = async (req, res) => {
-//   let { titleSlug, solution, language } = req.body;
-//   try {
-//     const newSolution = new Solution({ titleSlug, solution, language });
-//     await newSolution.save();
-//     //res.status(201).send('Solution posted successfully');
-//     return res.json({
-//       msg:'done'
-//     })
-//   } catch (error) {
-//     return res.json({
-//       error:error.message
-//     })
-//     //res.status(500).send('Error posting solution');
-//   }
-// };
-
-// module.exports = postSolution
-
-
-
-
-
-
-
-
-
 const Solution = require('../model/solution');
 
 const postSolution = async (req, res) => {
-  const { titleSlug, solution, language } = req.body;
+  const { userId, titleSlug, title, solution, language, username, topicTags} = req.body;
   try {
-    const newSolution = new Solution({ titleSlug, solution, language});
+    const newSolution = new Solution({ userId, titleSlug, title, solution, language, username, topicTags});
     if(newSolution.solution){
       await newSolution.save();
       res.status(201).json({ msg: 'Solution posted successfully' });
-    }else{
-      res.status(300).json({msg:'Nothing is posted'})
+    } else {
+      res.status(300).json({ msg: 'Nothing is posted' });
     }
-    
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -49,11 +19,24 @@ const postSolution = async (req, res) => {
 const getSolutionsByTitleSlug = async (req, res) => {
   const { titleSlug } = req.params;
   try {
-    const solutions = await Solution.find({ titleSlug });
+    const solutions = await Solution.find({ titleSlug }).populate('userId').populate('comments');
     res.status(200).json(solutions);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 };
 
-module.exports = { postSolution,getSolutionsByTitleSlug };
+
+const getUserSubmissions = async (req,res) =>{
+  const {userId} = req.params;
+  try {
+    console.log(userId);
+    const solutions = await Solution.find({ userId });
+    console.log(solutions);
+    res.status(200).json(solutions);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+module.exports = { postSolution,getSolutionsByTitleSlug,getUserSubmissions };
