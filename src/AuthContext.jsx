@@ -25,8 +25,8 @@ export const authReducer = (state,action) => {
         userLogin:null,
         isAuthenticated:false,
       }
-    default:
-      return state
+    // default:
+    //   return state
   }
 }
 export const AuthContextProvider = ({ children }) => {
@@ -35,34 +35,18 @@ export const AuthContextProvider = ({ children }) => {
     userLogin:null,
     isAuthenticated: false,
   });
-
-  // Check only for isAuthenticated flag to avoid automatic login
-  // useEffect(() => {
-  //   const isLoggedIn = localStorage.getItem('isAuthenticated');
-  //   if (isLoggedIn === 'true') {
-  //     dispatch({ type: 'login' });
-  //   }
-  // }, []);
-  useEffect(() => {
-    // Retrieve authentication state from local storage
-    const storedState = JSON.parse(localStorage.getItem('authState'));
-
-    if (storedState) {
-      dispatch(storedState);
-    }
-  }, []);
-
-  useEffect(() => {
-    // Store authentication state in local storage
-    localStorage.setItem('authState', JSON.stringify(state));
-  }, [state]);
-
+  
   useEffect(()=>{
     const user = JSON.parse(localStorage.getItem('user'))
     if(user){
       dispatch({type : 'login', payload: user})
     }
   },[])
+  useEffect(() => {
+    if (state.user) {
+      localStorage.setItem('user', JSON.stringify(state.user));
+    }
+  }, [state.user]);
 
   console.log('AuthContext state', state);
 

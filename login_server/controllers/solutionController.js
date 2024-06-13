@@ -1,4 +1,4 @@
-const { Solution, Comment } = require('../model/solution');
+const Solution = require('../model/solution');
 
 // const postSolution = async (req, res) => {
 //   const { titleSlug, solution, language, userId } = req.body;
@@ -16,7 +16,7 @@ const { Solution, Comment } = require('../model/solution');
 // };
 
 const postSolution = async (req, res) => {
-  const { titleSlug, solution, language, userId } = req.body;
+  const { userId, titleSlug, title, solution, language, username, topicTags} = req.body;
   try {
     if (!solution) {
       return res.status(400).json({ msg: 'Please enter a solution' });
@@ -42,31 +42,16 @@ const getSolutionsByTitleSlug = async (req, res) => {
 };
 
 
-const addComment = async (req, res) => {
+const getUserSubmissions = async (req,res) =>{
+  const {userId} = req.params;
   try {
-    const { solutionId } = req.params;
-    const { content, userId } = req.body;
-    const newComment = new Comment({
-      solutionId,
-      userId,
-      content
-    });
-    const savedComment = await newComment.save();
-    await Solution.findByIdAndUpdate(solutionId, { $push: { comments: savedComment._id } });
-    res.status(201).json(savedComment);
+    console.log(userId);
+    const solutions = await Solution.find({ userId });
+    console.log(solutions);
+    res.status(200).json(solutions);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to add comment' });
+    res.status(500).json({ error: error.message });
   }
 };
 
-const getComments = async (req, res) => {
-  try {
-    const { solutionId } = req.params;
-    const comments = await Comment.find({ solutionId });
-    res.status(200).json(comments);
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to get comments' });
-  }
-};
-
-module.exports = { postSolution, getSolutionsByTitleSlug, addComment, getComments };
+module.exports = { postSolution,getSolutionsByTitleSlug,getUserSubmissions };

@@ -8,7 +8,6 @@ const HomePage = () => {
   const [upcomingContests, setUpcomingContests] = useState([]);
   const [recentlyCompletedContests, setRecentlyCompletedContests] = useState([]);
   const [value, setValue] = useState(new Date());
-  const [selectedContest, setSelectedContest] = useState(null);
   const [selectedDateContests, setSelectedDateContests] = useState([]);
 
   useEffect(() => {
@@ -50,30 +49,17 @@ const HomePage = () => {
       </header>
       
       <section className="contests-section">
-        <div className="dropdown-container">
+        <div className="recent-contests">
           <h2 className="subheading">Recently Completed Contests</h2>
-          <select
-            className="contest-dropdown"
-            onChange={(e) => setSelectedContest(e.target.value)}
-          >
-            <option value="">Select a contest</option>
+          <ul className="contests-list">
             {recentlyCompletedContests.map((contest) => (
-              <option key={contest.id} value={contest.id}>
-                {contest.event} - {new Date(contest.start).toLocaleString()}
-              </option>
+              <li key={contest.id} className="contest-item">
+                <a href={contest.href} target="_blank" rel="noopener noreferrer">
+                  {contest.event} - {new Date(contest.start).toLocaleString()} (Duration: {Math.floor(contest.duration / 3600)} hours)
+                </a>
+              </li>
             ))}
-          </select>
-          {selectedContest && (
-            <div className="contest-details">
-              <h3>Contest Details</h3>
-              <p>{recentlyCompletedContests.find(c => c.id === selectedContest).event}</p>
-              <p>
-                {new Date(
-                  recentlyCompletedContests.find(c => c.id === selectedContest).start
-                ).toLocaleString()}
-              </p>
-            </div>
-          )}
+          </ul>
         </div>
 
         <div className="calendar-container">
@@ -108,14 +94,7 @@ const HomePage = () => {
         </div>
       </section>
 
-      <footer className="footer">
-        <p>&copy; 2024 Contest Dashboard. All Rights Reserved.</p>
-        <div className="social-links">
-          <a href="#">Facebook</a>
-          <a href="#">Twitter</a>
-          <a href="#">LinkedIn</a>
-        </div>
-      </footer>
+     
     </div>
   );
 };

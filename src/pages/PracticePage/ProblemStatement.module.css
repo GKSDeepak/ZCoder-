@@ -70,6 +70,9 @@ select{
 .icon{
   color: var(--ques-text);
 }
+.bookmarkIcon{
+  color: rgb(79, 67, 249); ;
+}
 .solutionInput{
   height: 100%;
   /* width: 650px; */
