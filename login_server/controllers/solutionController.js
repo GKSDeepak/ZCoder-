@@ -34,7 +34,7 @@ const postSolution = async (req, res) => {
 const getSolutionsByTitleSlug = async (req, res) => {
   const { titleSlug } = req.params;
   try {
-    const solutions = await Solution.find({ titleSlug }).populate('userId').populate('comments');
+    const solutions = await Solution.find({ titleSlug }).populate('userId');
     res.status(200).json(solutions);
   } catch (error) {
     res.status(500).json({ error: error.message });

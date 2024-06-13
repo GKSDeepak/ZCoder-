@@ -16,8 +16,8 @@ const ProblemStatement = () => {
   const [solutions, setSolutions] = useState([]);
   const [showSolutions, setShowSolutions] = useState(false);
   const [activeSolution, setActiveSolution] = useState(null);
-  const [comments, setComments] = useState({});
-  const [commentInput, setCommentInput] = useState('');
+  // const [comments, setComments] = useState({});
+  // const [commentInput, setCommentInput] = useState('');
   const {userLogin} = useAuthContext();
 
 
