@@ -19,8 +19,9 @@ const Profile = () => {
   const [newTechStack, setNewTechStack] = useState('');
   const [newLanguage, setNewLanguage] = useState('');
   const [newFriend, setNewFriend] = useState('');
+  const {isAuthenticated,userLogin,isEdit,userr} = useAuthContext()
 
-  const userId = '66681f6e9d41d85122737863'; // Replace with actual user ID
+  const userId = userLogin.result._id; // Replace with actual user ID
 
   const fetchUserData = async () => {
     try {
