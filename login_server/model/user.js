@@ -17,7 +17,22 @@ const userSchema = mongoose.Schema({
       verified: {
         type: Boolean,
         default: false
+      },
+      followers: {
+        type: [String],
+        required: false,
+        default: null
+      },
+      techStacks: {
+        type: [String]
+      },
+      languages: {
+        type: [String]
+      },
+      friends: {
+        type: [String]
       }
+
 
 //    // dateOfBirth:Date,
 
