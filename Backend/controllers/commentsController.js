@@ -3,8 +3,8 @@ const Solution = require('../model/solution')
 
 const addComment = async (req, res) => {
   try {
-    const { solutionId } = req.params;
-    const { content, userId } = req.body;
+    //const { solutionId } = req.params;
+    const { content, userId,solutionId, username } = req.body;
     const newComment = new Comment({
       solutionId,
       username,
@@ -12,6 +12,7 @@ const addComment = async (req, res) => {
       content
     });
     const savedComment = await newComment.save();
+    console.log(savedComment);
     await Solution.findByIdAndUpdate(solutionId, { $push: { comments: savedComment._id } });
     res.status(201).json(savedComment);
   } catch (error) {
