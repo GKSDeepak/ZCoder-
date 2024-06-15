@@ -155,25 +155,25 @@ const Profile = () => {
   };
 
   return (
-    <div className={styles.App}>
-      <h1>User Profile</h1>
+    <div className={styles.Appp}>
+      <h1 className={styles.ph1}>User Profile</h1>
       {/* <div className={styles.loadbutton}>
       <button className={styles.loadbutton} onClick={fetchUserData}>Load User Data</button>
       </div> */}
       {user && (
         <>
           <div className={styles['user-info']}>
-            <p>Username: {user.username}</p>
-            <p>Email: {user.email}</p>
+            <p className={styles.pp} >Username: {user.username}</p>
+            <p className={styles.pp} >Email: {user.email}</p>
           </div>
-          <h2>Tech Stacks</h2>
-          <ul>
+          <h2 className={styles.ph2} >Tech Stacks</h2>
+          <ul className={styles.pul} >
             {techStacks.map((stack, index) => (
-              <li  key={index}>
+              <li className={styles.pli} key={index}>
                 {stack}
                 <div>
-                  <button onClick={() => handleDeleteTechStack(index)}>Delete</button>
-                  <button onClick={() => {
+                  <button className={styles.pbutton} onClick={() => handleDeleteTechStack(index)}>Delete</button>
+                  <button className={styles.pbutton} onClick={() => {
                     const updatedStack = prompt('Edit Tech Stack:', stack);
                     if (updatedStack) handleEditTechStack(index, updatedStack);
                   }}>Edit</button>
@@ -181,22 +181,22 @@ const Profile = () => {
               </li>
             ))}
           </ul>
-          <input
+          <input className={styles.pinput}  
             type="text"
             value={newTechStack}
             onChange={(e) => setNewTechStack(e.target.value)}
             placeholder="New Tech Stack"
           />
-          <button onClick={handleAddTechStack}>Add Tech Stack</button>
-  
-          <h2>Languages</h2>
-          <ul>
+          <button className={styles.pbutton} onClick={handleAddTechStack}>Add Tech Stack</button>
+          
+          <h2 className={styles.ph2} >Languages</h2>
+          <ul className={styles.pul} >
             {languages.map((language, index) => (
-              <li key={index}>
+              <li className={styles.pli} key={index}>
                 {language}
                 <div>
-                  <button onClick={() => handleDeleteLanguage(index)}>Delete</button>
-                  <button onClick={() => {
+                  <button className={styles.pbutton} onClick={() => handleDeleteLanguage(index)}>Delete</button>
+                  <button className={styles.pbutton} onClick={() => {
                     const updatedLanguage = prompt('Edit Language:', language);
                     if (updatedLanguage) handleEditLanguage(index, updatedLanguage);
                   }}>Edit</button>
@@ -204,37 +204,37 @@ const Profile = () => {
               </li>
             ))}
           </ul>
-          <input
+          <input className={styles.pinput} 
             type="text"
             value={newLanguage}
             onChange={(e) => setNewLanguage(e.target.value)}
             placeholder="New Language"
           />
-          <button onClick={handleAddLanguage}>Add Language</button>
+          <button className={styles.pbutton} onClick={handleAddLanguage}>Add Language</button>
   
-          <h2>Friends</h2>
-          <ul>
+          <h2 className={styles.ph2} >Friends</h2>
+          <ul className={styles.pul} >
             {friends.map((friend, index) => (
-              <li key={index}>
+              <li className={styles.pli} key={index}>
                 {friend}
-                <button onClick={() => handleDeleteFriend(friend)}>Delete</button>
+                <button className={styles.pbutton} onClick={() => handleDeleteFriend(friend)}>Delete</button>
               </li>
             ))}
           </ul>
   
-          <h2>Search User</h2>
-          <input
+          <h2 className={styles.ph2} >Search User</h2>
+          <input className={styles.pinput}  
             type="text"
             value={searchUsername}
             onChange={(e) => setSearchUsername(e.target.value)}
             placeholder="Search Username"
           />
-          <button onClick={handleSearchUser}>Search</button>
+          <button className={styles.pbutton} onClick={handleSearchUser}>Search</button>
           {message && <p className={styles.message}>{message}</p>}
           {searchResult && (
             <>
-              <p>User found: {searchResult.username}</p>
-              <button onClick={handleAddFriend}>Add Friend</button>
+              <p className={styles.pp} >User found: {searchResult.username}</p>
+              <button className={styles.pbutton} onClick={handleAddFriend}>Add Friend</button>
             </>
           )}
         </>
