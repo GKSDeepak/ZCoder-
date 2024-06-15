@@ -6,6 +6,15 @@ import styles from './ProblemStatement.module.css'
 import { IoIosArrowDown,IoIosArrowUp, IoMdBookmark } from "react-icons/io";
 import {useAuthContext} from '../../hooks/useAuthContext';
 
+import { Controlled as CodeMirror } from 'react-codemirror2';
+import 'codemirror/lib/codemirror.css';
+import 'codemirror/theme/material.css';
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/python/python';
+import 'codemirror/mode/clike/clike';
+import 'codemirror/mode/sql/sql';
+import 'codemirror/mode/xml/xml';
+
 const ProblemStatement = () => {
   const { titleSlug } = useParams();
   const [problem, setProblem] = useState(null);
@@ -17,21 +26,15 @@ const ProblemStatement = () => {
   const [showSolutions, setShowSolutions] = useState(false);
   const [activeSolution, setActiveSolution] = useState(null);
   const [comments, setComments] = useState({}); // State to store comments for a solution
-
-  // const [comments, setComments] = useState({});
-  // const [commentInput, setCommentInput] = useState('');
-  const {userLogin} = useAuthContext();
-
-
+  const { userLogin } = useAuthContext();
   const [bookmarks, setBookmarks] = useState(() => {
     const storedBookmarks = localStorage.getItem('bookmarks');
-    return storedBookmarks? JSON.parse(storedBookmarks) : [];
+    return storedBookmarks ? JSON.parse(storedBookmarks) : [];
   });
-  
+
   useEffect(() => {
     localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
   }, [bookmarks]);
-
 
   useEffect(() => {
     const fetchProblemStatement = async () => {
@@ -48,51 +51,46 @@ const ProblemStatement = () => {
     fetchProblemStatement();
   }, [titleSlug]);
 
-  const handleSolutionChange = (e) => {
-    setSolution(e.target.value);
-    // console.log(solution);
+  const handleSolutionChange = (editor, data, value) => {
+    setSolution(value);
   };
 
   const handleLanguageChange = (e) => {
     setLanguage(e.target.value);
   };
 
-
   const handlePostSolution = async () => {
-     try{
+    try {
       const response = await fetch('/user/solutions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ userId:userLogin.result._id, titleSlug, title:problem.questionTitle, solution, language, username:userLogin.result.username, topicTags: problem.topicTags}),
+        body: JSON.stringify({
+          userId: userLogin.result._id,
+          titleSlug,
+          title: problem.questionTitle,
+          solution,
+          language,
+          username: userLogin.result.username,
+          topicTags: problem.topicTags
+        }),
       });
       console.log(response);
       if (response.ok) {
         alert('Solution posted successfully');
         setSolution('');
-      } 
-      else {
+      } else {
         alert('Nothing is posted');
       }
-    } 
-    catch (error) {
+    } catch (error) {
       alert('Error posting solution');
     }
   };
 
-
-
-
-  
-
-
   const handleBookmark = async (sol) => {
-    // setIsBookmarked((prevIsBookmarked)=>!prevIsBookmarked);
-    // setBookmark(bookmark === sol._id ? null : sol._id);
     const isBookmarked = bookmarks.includes(sol._id);
-    if(!isBookmarked){
-      
+    if (!isBookmarked) {
       try {
         const response = await fetch('/user/bookmarks', {
           method: 'POST',
@@ -100,9 +98,9 @@ const ProblemStatement = () => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
-            solutionId:sol._id,
-            userId:userLogin.result._id, 
-            title:problem.questionTitle,
+            solutionId: sol._id,
+            userId: userLogin.result._id,
+            title: problem.questionTitle,
             titleSlug,
             language: sol.language,
             solution: sol.solution,
@@ -111,25 +109,23 @@ const ProblemStatement = () => {
         });
         if (response.ok) {
           setBookmarks((prevBookmarks) => [...prevBookmarks, sol._id]);
-          // setBookmark(sol._id)
           alert('Solution bookmarked successfully');
         } else {
           alert('Failed to bookmark solution');
         }
-      }catch (error) {
-          console.error('Error bookmarking solution', error);
-        }
-    }else{
+      } catch (error) {
+        console.error('Error bookmarking solution', error);
+      }
+    } else {
       try {
-        
         const response = await fetch(`/user/bookmarks/${userLogin.result._id}/${titleSlug}/${sol._id}`, {
           method: 'DELETE',
         });
-      
+
         if (response.ok) {
           const responseBody = await response.json();
           console.log('Response from server:', responseBody);
-          setBookmarks((prevBookmarks) => prevBookmarks.filter((id) => id!== sol._id));
+          setBookmarks((prevBookmarks) => prevBookmarks.filter((id) => id !== sol._id));
           alert('Solution unbookmarked successfully');
         } else {
           const errorResponse = await response.json();
@@ -140,23 +136,22 @@ const ProblemStatement = () => {
         console.error('Error unbookmarking solution:', error);
         alert('Failed to unbookmark solution');
       }
-    } 
+    }
   };
 
   const handlePostComment = async (solutionId, comment) => {
     try {
       const response = await fetch(`/user/comments/${solutionId}`, {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ content: comment, userId:userLogin.result._id, solutionId:solutionId, username : userLogin.result.username  }),
+        body: JSON.stringify({ content: comment, userId: userLogin.result._id, solutionId: solutionId, username: userLogin.result.username }),
       });
       console.log(response);
       if (response.ok) {
         const newComment = await response.json();
         setComments((prevComments) => ({ ...prevComments, [solutionId]: [...(prevComments[solutionId] || []), newComment] }));
-        // Update comments state for the specific solution
       } else {
         alert('Failed to post comment');
       }
@@ -176,9 +171,6 @@ const ProblemStatement = () => {
       alert('Failed to fetch comments');
     }
   };
-    
-
-
 
   const fetchSolutions = async () => {
     if (showSolutions) {
@@ -195,9 +187,11 @@ const ProblemStatement = () => {
       alert('Failed to fetch solutions');
     }
   };
+
   const toggleSolution = (id) => {
     setActiveSolution(activeSolution === id ? null : id);
   };
+
   if (loading) {
     return <div className='loading'>Loading...</div>;
   }
@@ -224,7 +218,7 @@ const ProblemStatement = () => {
             <option value="cpp">C++</option>
           </select>
           <button className={styles.button} onClick={handlePostSolution}>Post your solution</button>
-          <button className={`${styles.button} ${showSolutions ? styles.show : ''}`} onClick={fetchSolutions}>Solutions </button>
+          <button className={`${styles.button} ${showSolutions ? styles.show : ''}`} onClick={fetchSolutions}>Solutions</button>
         </div>
         {showSolutions ? (
           <div className={styles.solutionsList}>
@@ -232,7 +226,7 @@ const ProblemStatement = () => {
               <div key={sol._id} className={styles.solutionItem}>
                 <div className={styles.solutionHeader} onClick={() => toggleSolution(sol._id)}>
                   <p><strong>Language used:</strong> {sol.language}</p>
-                  <p>Posted by: {sol.username || 'Anonymous'}</p>  {/* Display 'Anonymous' if username is missing */}
+                  <p>Posted by: {sol.username || 'Anonymous'}</p>
                   <p><strong>Posted at:</strong> {new Date(sol.createdAt).toLocaleString()}</p>
                   <IoMdBookmark className={`${styles.icon} ${bookmarks.includes(sol._id) ? styles.bookmarkIcon : ''}`} onClick={() => handleBookmark(sol)} />
                   {activeSolution === sol._id ? <IoIosArrowDown className={styles.icon} /> : <IoIosArrowUp className={styles.icon} />}
@@ -242,19 +236,15 @@ const ProblemStatement = () => {
                   <SyntaxHighlighter language={sol.language} style={okaidia}>
                     {sol.solution}
                   </SyntaxHighlighter>
-                  {/* Conditionally render comments based on availability */}
                   {comments[sol._id] && (
                     <div className={styles.comments}>
                       <h4>Comments</h4>
-                      {/* Map through comments for this solution and display them */}
                       {comments[sol._id].map((comment) => (
                         <div key={comment._id} className={styles.comment}>
                           <p>{comment.content}</p>
-                          {/* Optionally display username who posted the comment (if available) */}
                           {comment.username && <p>Posted by: {comment.username}</p>}
                         </div>
                       ))}
-                      {/* Add a form to post a new comment */}
                       <form onSubmit={(e) => {
                         e.preventDefault();
                         const comment = e.target.elements.commentInput.value;
@@ -271,18 +261,21 @@ const ProblemStatement = () => {
             ))}
           </div>
         ) : (
-          <textarea 
-            className={styles.solutionInput} 
-            value={solution} 
-            onChange={handleSolutionChange} 
-            placeholder="Write your solution here..."
-            spellCheck={false}
+          <CodeMirror
+            value={solution}
+            options={{
+              mode: language,
+              theme: 'material',
+              lineNumbers: true,
+            }}
+            onBeforeChange={(editor, data, value) => {
+              setSolution(value);
+            }}
           />
         )}
       </div>
     </div>
   );
-
-}
+};
 
 export default ProblemStatement;
