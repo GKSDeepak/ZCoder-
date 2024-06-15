@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { okaidia } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import styles from './ProblemStatement.module.css'
@@ -16,19 +16,57 @@ const ProblemStatement = () => {
   const [solutions, setSolutions] = useState([]);
   const [showSolutions, setShowSolutions] = useState(false);
   const [activeSolution, setActiveSolution] = useState(null);
-  // const [comments, setComments] = useState({});
-  // const [commentInput, setCommentInput] = useState('');
-  const {userLogin} = useAuthContext();
-
-
-  const [bookmarks, setBookmarks] = useState(() => {
-    const storedBookmarks = localStorage.getItem('bookmarks');
-    return storedBookmarks? JSON.parse(storedBookmarks) : [];
-  });
+  const [comments, setComments] = useState({}); // State to store comments for a solution
+  const [visibleComments, setVisibleComments] = useState(null);
+  const [alertShown, setAlertShown] = useState(false);
+  
+  const navigate = useNavigate();
+  const {userLogin,isAuthenticated} = useAuthContext();
+  const [bookmarks, setBookmarks] = useState([]);
   
   useEffect(() => {
-    localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
-  }, [bookmarks]);
+    // Fetch user's bookmarks when userLogin changes
+    if (userLogin) {
+      fetchBookmarks(userLogin.result._id);
+    }
+  }, [userLogin]);
+  
+  const fetchBookmarks = async (userId) => {
+    try {
+      const response = await fetch(`/user/bookmarks/${userId}`);
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data)
+
+        // Extract all solutionIds from the data
+        const allSolutionIds = data.reduce((acc, bookmark) => {
+          bookmark.solutions.forEach(solution => {
+            acc.push(solution.solutionId._id);
+          });
+          return acc;
+        }, []);
+        // Extract sol._id values from data into an array
+        //const bookmarkIds = data.map(bookmark => bookmark.solutions);
+        // setBookmarks(data);
+        console.log('All Solution IDs:', allSolutionIds);
+
+        setBookmarks(allSolutionIds);
+      } else {
+        console.error('Failed to fetch bookmarks');
+      }
+    } catch (error) {
+      console.error('Error fetching bookmarks:', error);
+    }
+  };
+  
+  // const [bookmarks, setBookmarks] = useState(() => {
+  //   const storedBookmarks = localStorage.getItem('bookmarks');
+  //   return storedBookmarks? JSON.parse(storedBookmarks) : [];
+  // });
+  
+  // useEffect(() => {
+  //   localStorage.setItem('bookmarks', JSON.stringify(bookmarks));
+  // }, [bookmarks]);
 
 
   useEffect(() => {
@@ -57,6 +95,14 @@ const ProblemStatement = () => {
 
 
   const handlePostSolution = async () => {
+    if(!isAuthenticated){
+      if (!alertShown) {
+        alert('You need to be logged in to view this page.');
+        setAlertShown(true);
+        navigate('/login'); // Redirect to login page or another appropriate page
+      }
+      return;
+    }
      try{
       const response = await fetch('/user/solutions', {
         method: 'POST',
@@ -75,6 +121,7 @@ const ProblemStatement = () => {
       }
     } 
     catch (error) {
+      console.log(error);
       alert('Error posting solution');
     }
   };
@@ -84,11 +131,13 @@ const ProblemStatement = () => {
 
   
 
-
+  
   const handleBookmark = async (sol) => {
-    // setIsBookmarked((prevIsBookmarked)=>!prevIsBookmarked);
-    // setBookmark(bookmark === sol._id ? null : sol._id);
     const isBookmarked = bookmarks.includes(sol._id);
+
+      
+  
+    
     if(!isBookmarked){
       
       try {
@@ -108,8 +157,10 @@ const ProblemStatement = () => {
           }),
         });
         if (response.ok) {
+       
           setBookmarks((prevBookmarks) => [...prevBookmarks, sol._id]);
-          // setBookmark(sol._id)
+          console.log(bookmarks);
+
           alert('Solution bookmarked successfully');
         } else {
           alert('Failed to bookmark solution');
@@ -125,8 +176,6 @@ const ProblemStatement = () => {
         });
       
         if (response.ok) {
-          const responseBody = await response.json();
-          console.log('Response from server:', responseBody);
           setBookmarks((prevBookmarks) => prevBookmarks.filter((id) => id!== sol._id));
           alert('Solution unbookmarked successfully');
         } else {
@@ -141,6 +190,54 @@ const ProblemStatement = () => {
     } 
   };
     
+
+
+
+
+
+
+
+  const handlePostComment = async (solutionId, comment) => {
+    try {
+      const response = await fetch(`/user/comments/${solutionId}`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: comment, userId:userLogin.result._id, solutionId:solutionId, username : userLogin.result.username  }),
+      });
+      console.log(response);
+      if (response.ok) {
+        const newComment = await response.json();
+        setComments((prevComments) => ({ ...prevComments, [solutionId]: [...(prevComments[solutionId] || []), newComment] }));
+        // Update comments state for the specific solution
+      } else {
+        alert('Failed to post comment');
+      }
+    } catch (error) {
+      console.error('Error posting comment:', error);
+      alert('Failed to post comment');
+    }
+  };
+
+  const fetchComments = async (solutionId) => {
+    try {
+      const response = await fetch(`/user/comments/${solutionId}`);
+      const data = await response.json();
+      setComments((prevComments) => ({ ...prevComments, [solutionId]: data }));
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      alert('Failed to fetch comments');
+    }
+  };
+
+
+
+
+
+
+
+
 
 
 
@@ -162,6 +259,10 @@ const ProblemStatement = () => {
   const toggleSolution = (id) => {
     setActiveSolution(activeSolution === id ? null : id);
   };
+
+  const toggleComment = (id) =>{
+    setVisibleComments(visibleComments === id ? null : id);
+  }
   if (loading) {
     return <div className='loading'>Loading...</div>;
   }
@@ -198,6 +299,8 @@ const ProblemStatement = () => {
                   <p><strong>Language used:</strong> {sol.language}</p>
                   <p>Posted by:{sol.username}</p>
                   <p><strong>Posted at:</strong> {new Date(sol.createdAt).toLocaleString()}</p>
+                  {/* <IoMdBookmark className={`${styles.icon} ${bookmarks.solutions.some(solution => solution.solutionId === sol._id)? styles.bookmarkIcon : ''}`} onClick={() => handleBookmark(sol)} /> */}
+                  
                   <IoMdBookmark className={`${styles.icon} ${bookmarks.includes(sol._id)? styles.bookmarkIcon : ''}`} onClick={() => handleBookmark(sol)} />
                   {activeSolution === sol._id ? <IoIosArrowDown className={styles.icon}/> : <IoIosArrowUp className={styles.icon} /> }
                 </div>  
@@ -205,6 +308,30 @@ const ProblemStatement = () => {
                   <SyntaxHighlighter language={sol.language} style={okaidia} >
                     {sol.solution}
                   </SyntaxHighlighter>
+                  <button className={styles.button} onClick={() => fetchComments(sol._id)}>View Comments</button> 
+                  {/* Conditionally render comments based on availability */}
+                  {comments[sol._id] && (
+                    <div className={styles.comments}>
+                      {/* Map through comments for this solution and display them */}
+                      {comments[sol._id].map((comment) => (
+                        <div key={comment._id} className={styles.comment}>
+                          <p className={styles.commentContent}>{comment.content}</p>
+                          {/* Optionally display username who posted the comment (if available) */}
+                          {comment.username && <p>Posted by: {comment.username}</p>}
+                        </div>
+                      ))}
+                      {/* Add a form to post a new comment */}
+                      <form onSubmit={(e) => {
+                        e.preventDefault();
+                        const comment = e.target.elements.commentInput.value;
+                        handlePostComment(sol._id, comment);
+                        e.target.elements.commentInput.value = '';
+                      }}>
+                        <textarea name="commentInput" placeholder="Write your comment here..." />
+                        <button className={styles.button} type="submit">Post Comment</button>
+                      </form>
+                    </div>
+                  )}
                 </div>   
               </div>
             ))}

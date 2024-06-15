@@ -8,6 +8,7 @@ const Home = () => {
   const [upcomingContests, setUpcomingContests] = useState([]);
   const [recentlyCompletedContests, setRecentlyCompletedContests] = useState([]);
   const [value, setValue] = useState(new Date());
+  const [loading, setLoading] = useState(true);
   const [selectedContest, setSelectedContest] = useState(null);
   const [selectedDateContests, setSelectedDateContests] = useState([]);
 
@@ -29,6 +30,8 @@ const Home = () => {
         setRecentlyCompletedContests(completedResponse.data.objects);
       } catch (error) {
         console.error('Error fetching contests:', error);
+      }finally {
+        setLoading(false);
       }
     };
 
@@ -42,6 +45,12 @@ const Home = () => {
     setSelectedDateContests(contestsOnDate);
   };
 
+  if (loading) {
+    return <div className='loading'>Loading...</div>;
+  }
+
+  
+
   return (
     <div className="homepage">
       <header className="hero-section">
@@ -50,35 +59,23 @@ const Home = () => {
       </header>
       
       <section className="contests-section">
-        <div className="dropdown-container">
-          <h2 className="subheading">Recently Completed Contests</h2>
-          <select
-            className="contest-dropdown"
-            onChange={(e) => setSelectedContest(e.target.value)}
-          >
-            <option value="">Select a contest</option>
-            {recentlyCompletedContests.map((contest) => (
-              <option key={contest.id} value={contest.id}>
-                {contest.event} - {new Date(contest.start).toLocaleString()}
-              </option>
-            ))}
-          </select>
-          {selectedContest && (
-            <div className="contest-details">
-              <h3>Contest Details</h3>
-              <p>{recentlyCompletedContests.find(c => c.id === selectedContest).event}</p>
-              <p>
-                {new Date(
-                  recentlyCompletedContests.find(c => c.id === selectedContest).start
-                ).toLocaleString()}
-              </p>
-            </div>
-          )}
-        </div>
-
+        <div className="recent-contests">
+            <h2 className="subheading">Recently Completed Contests</h2>
+            <ul className="contests-list">
+              {recentlyCompletedContests.map((contest) => (
+                <li key={contest.id} className="contest-item">
+                  <a href={contest.href} target="_blank" rel="noopener noreferrer">
+                    {contest.event} - {new Date(contest.start).toLocaleString()} (Duration: {Math.floor(contest.duration / 3600)} hours)
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+    
         <div className="calendar-container">
           <h2 className="subheading">Upcoming Contests</h2>
           <Calendar
+           className='calender'
             onChange={setValue}
             value={value}
             onClickDay={onDateClick}
@@ -91,13 +88,14 @@ const Home = () => {
               }
             }}
           />
+          <p>Dot represents a contest</p>
           {selectedDateContests.length > 0 && (
             <div className="selected-date-contests">
               <h3>Contests on {value.toDateString()}</h3>
               <ul>
                 {selectedDateContests.map((contest) => (
                   <li key={contest.id}>
-                    <a href={contest.href} target="_blank" rel="noopener noreferrer">
+                    <a href={contest.href} target="_blank" rel="noopener noreferrer" className='details'>
                       {contest.event} - {new Date(contest.start).toLocaleString()} (Duration: {Math.floor(contest.duration / 3600)} hours)
                     </a>
                   </li>
@@ -107,15 +105,6 @@ const Home = () => {
           )}
         </div>
       </section>
-
-      {/* <footer className="footer">
-        <p>&copy; 2024 Contest Dashboard. All Rights Reserved.</p>
-        <div className="social-links">
-          <a href="#">Facebook</a>
-          <a href="#">Twitter</a>
-          <a href="#">LinkedIn</a>
-        </div>
-      </footer> */}
     </div>
   );
 };

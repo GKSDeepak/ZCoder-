@@ -27,6 +27,7 @@
   padding: 20px;
   border-radius: 5px;
   border-right:1px solid var(--ques-text);
+  width: 800px;
   overflow: auto; /* Allow vertical scrolling if content exceeds the container */
 }
 .problemStatement::-webkit-scrollbar {
@@ -128,3 +129,43 @@ pre{
   max-height: 600px; /* Adjust as needed */
 }
 
+
+
+
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  padding: 10px;
+  
+  gap: 30px;
+}
+
+.comment {
+  margin-bottom: 10px;
+  border: 1px solid var(--ques-text);
+  background-color: var(--practice-background);
+  display: flex;
+  justify-content: space-between;
+  margin: 0 5px;
+  padding: 0 5px;
+}
+
+
+.commentContent {
+  white-space: pre-wrap; /* Ensures that whitespace is preserved */
+  word-wrap: break-word; /* Ensures long words break to fit within the container */
+}
+
+
+textarea[name="commentInput"] {
+  min-height: 200px;
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  resize: none;
+  background-color:var(--practice-background);
+  color: var(--ques-text);
+}

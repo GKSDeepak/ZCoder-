@@ -3,8 +3,8 @@ const Solution = require('../model/solution')
 
 const addComment = async (req, res) => {
   try {
-    const { solutionId } = req.params;
-    const { content, userId } = req.body;
+    //const { solutionId } = req.params;
+    const { content, userId,solutionId, username} = req.body;
     const newComment = new Comment({
       solutionId,
       username,

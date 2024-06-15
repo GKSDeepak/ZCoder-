@@ -35,39 +35,6 @@ exports.addBookmark = async (req, res) => {
 
 
 
-
-
-
-// exports.deleteBookmark = async (req, res) => {
-//   const { userId, titleSlug, id } = req.params;
-//   if (!titleSlug) {
-//     return res.status(400).json({ error: 'Title slug is required' });
-//   }
-//   try {
-//    // console.log(`Deleting solution with id ${id} from bookmark with userId ${userId} and titleSlug ${titleSlug}`);
-//     const bookmark = await Bookmark.findOne({ userId: `${userId}`, titleSlug: `${titleSlug}` });
-//     if (!bookmark) {
-//       return res.status(404).json({ error: 'Bookmark not found' });
-//     }
-//     const solutions = bookmark.solutions.filter((solution) => solution.solutionId.toString() !== id);
-//     await Bookmark.updateOne(
-//       { userId: `${userId}`, titleSlug: `${titleSlug}` },
-//       { $unset: { solutions: "" } }
-//     );
-//     await Bookmark.updateOne(
-//       { userId: `${userId}`, titleSlug: `${titleSlug}` },
-//       { $set: { solutions } }
-//     );
-//     res.status(200).json({ message: 'Solution deleted successfully' });
-//   } catch (error) {
-//     console.error(error);
-//     res.status(400).json({ error: 'Unable to delete solution' });
-//   }
-// };
-
-
-
-
 exports.deleteBookmark = async (req, res) => {
   const { userId, titleSlug, id } = req.params;
   try {
