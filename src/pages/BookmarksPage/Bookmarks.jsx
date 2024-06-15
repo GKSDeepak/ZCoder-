@@ -20,14 +20,14 @@ const Bookmarks = () => {
   console.log(userLogin);
 
   useEffect(() => {
-    if(!isAuthenticated){
-      if (!alertShown) {
-        alert('You need to be logged in to view this page.');
-        setAlertShown(true);
-        navigate('/login'); // Redirect to login page or another appropriate page
-      }
-      return;
-    }
+    // if(!isAuthenticated){
+    //   if (!alertShown) {
+    //     alert('You need to be logged in to view this page.');
+    //     setAlertShown(true);
+    //     navigate('/login'); // Redirect to login page or another appropriate page
+    //   }
+    //   return;
+    // }
     if (userLogin) {
       fetchBookmarkedQuestions(userLogin.result._id);
     }

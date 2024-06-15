@@ -17,18 +17,14 @@ const Submissions = () => {
   const {userLogin,isAuthenticated} = useAuthContext()
 
 
+
+  
   useEffect(() => {
-    if(!isAuthenticated){
-      if (!alertShown) {
-        alert('You need to be logged in to view this page.');
-        setAlertShown(true);
-        navigate('/login'); // Redirect to login page or another appropriate page
-      }
-      return;
-    }
-    if (userLogin,isAuthenticated,alertShown) {
+    
+    if (userLogin) {
       fetchSubmissions(userLogin.result._id);
     }
+   
   }, [userLogin]); // Run the effect when the user object changes
 
   const fetchSubmissions = async (userId) => {
@@ -39,6 +35,7 @@ const Submissions = () => {
         console.log(data)
         setSubmissions(data);
       } else {
+        
         console.error('Failed to fetch  questions');
       }
     } catch (error) {
@@ -46,6 +43,7 @@ const Submissions = () => {
     }finally {
       setLoading(false);
     }
+    
   };
   
   const indexOfLastQuestion = currentPage * questionsPerPage;
