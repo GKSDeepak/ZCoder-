@@ -313,7 +313,7 @@ const Profile = () => {
                 </li>
               ))}
             </ul>
-            <div >
+            <div className={styles.ratings} >
               <h1>Codeforces Handles and Ratings</h1>
               {handles.map(({ handle, currentRating }) => (
                 <div key={handle} >
@@ -321,16 +321,15 @@ const Profile = () => {
                   <button onClick={() => handleDeleteHandle(handle)}>Delete</button>
                 </div>
               ))}
-              <div>
+              <div className={styles.input}>
                 <input
                   type="text"
                   value={handle}
                   onChange={(e) => setHandle(e.target.value)}
                   placeholder="Enter Codeforces handle"
-                  
+                  className={styles.pinput}
                 />
-                <br />
-                <button onClick={handleAddHandle} >
+                <button className={styles.pbutton}onClick={handleAddHandle} >
                   Add Handle
                 </button>
               </div>
