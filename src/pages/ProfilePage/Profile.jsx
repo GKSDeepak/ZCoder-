@@ -148,23 +148,29 @@ const Profile = () => {
   };
 
   return (
-    <div className="App">
+    <div className={styles.App}>
       <h1>User Profile</h1>
-      <button onClick={fetchUserData}>Load User Data</button>
+      <div className={styles.loadbutton}>
+      <button className={styles.loadbutton} onClick={fetchUserData}>Load User Data</button>
+      </div>
       {user && (
         <>
-          <p>Username: {user.username}</p>
-          <p>Email: {user.email}</p>
+          <div className={styles['user-info']}>
+            <p>Username: {user.username}</p>
+            <p>Email: {user.email}</p>
+          </div>
           <h2>Tech Stacks</h2>
           <ul>
             {techStacks.map((stack, index) => (
-              <li key={index}>
+              <li  key={index}>
                 {stack}
-                <button onClick={() => handleDeleteTechStack(index)}>Delete</button>
-                <button onClick={() => {
-                  const updatedStack = prompt('Edit Tech Stack:', stack);
-                  if (updatedStack) handleEditTechStack(index, updatedStack);
-                }}>Edit</button>
+                <div>
+                  <button onClick={() => handleDeleteTechStack(index)}>Delete</button>
+                  <button onClick={() => {
+                    const updatedStack = prompt('Edit Tech Stack:', stack);
+                    if (updatedStack) handleEditTechStack(index, updatedStack);
+                  }}>Edit</button>
+                </div>
               </li>
             ))}
           </ul>
@@ -175,17 +181,19 @@ const Profile = () => {
             placeholder="New Tech Stack"
           />
           <button onClick={handleAddTechStack}>Add Tech Stack</button>
-
+  
           <h2>Languages</h2>
           <ul>
             {languages.map((language, index) => (
               <li key={index}>
                 {language}
-                <button onClick={() => handleDeleteLanguage(index)}>Delete</button>
-                <button onClick={() => {
-                  const updatedLanguage = prompt('Edit Language:', language);
-                  if (updatedLanguage) handleEditLanguage(index, updatedLanguage);
-                }}>Edit</button>
+                <div>
+                  <button onClick={() => handleDeleteLanguage(index)}>Delete</button>
+                  <button onClick={() => {
+                    const updatedLanguage = prompt('Edit Language:', language);
+                    if (updatedLanguage) handleEditLanguage(index, updatedLanguage);
+                  }}>Edit</button>
+                </div>
               </li>
             ))}
           </ul>
@@ -196,7 +204,7 @@ const Profile = () => {
             placeholder="New Language"
           />
           <button onClick={handleAddLanguage}>Add Language</button>
-
+  
           <h2>Friends</h2>
           <ul>
             {friends.map((friend, index) => (
@@ -206,7 +214,7 @@ const Profile = () => {
               </li>
             ))}
           </ul>
-
+  
           <h2>Search User</h2>
           <input
             type="text"
@@ -215,7 +223,7 @@ const Profile = () => {
             placeholder="Search Username"
           />
           <button onClick={handleSearchUser}>Search</button>
-          {message && <p>{message}</p>}
+          {message && <p className={styles.message}>{message}</p>}
           {searchResult && (
             <>
               <p>User found: {searchResult.username}</p>
