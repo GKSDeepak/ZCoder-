@@ -28,4 +28,7 @@ ZCoder is a dynamic coding platform designed to help developers practice coding 
 ### How to Run
 - npm install
 - npm run dev
+<<<<<<< HEAD
 
+=======
+>>>>>>> 715bb5c3aed9f4c842f9200a8bf2793e82cff358

@@ -163,14 +163,14 @@ const Profile = () => {
 
   useEffect(() => {
     if(userLogin){
-      fetchHandles(userLogin.result._id);
+      fetchHandles();
     }
     
   }, [userLogin]);
 
-  const fetchHandles = async (userId) => {
+  const fetchHandles = async () => {
     try {
-      const response = await axios.get(`http://localhost:8008/user/${userId}/handles`);
+      const response = await axios.get(`http://localhost:8008/user/${userLogin.result._id}/handles`);
       const handlesData = await Promise.all(
         response.data.map(async (handle) => {
           const ratingResponse = await axios.get(`https://codeforces.com/api/user.rating?handle=${handle}`);
@@ -316,9 +316,9 @@ const Profile = () => {
             <div className={styles.ratings} >
               <h1>Codeforces Handles and Ratings</h1>
               {handles.map(({ handle, currentRating }) => (
-                <div key={handle} >
+                <div key={handle} className={styles.delete} >
                   <p>{handle}: {currentRating}</p>
-                  <button onClick={() => handleDeleteHandle(handle)}>Delete</button>
+                  <button className={styles.pbutton} onClick={() => handleDeleteHandle(handle)}>Delete</button>
                 </div>
               ))}
               <div className={styles.input}>
@@ -330,7 +330,7 @@ const Profile = () => {
                   className={styles.pinput}
                 />
                 <button className={styles.pbutton}onClick={handleAddHandle} >
-                  Add Handle
+                  Add Codeforces Handle
                 </button>
               </div>
               {message && <p>{message}</p>}
@@ -345,5 +345,6 @@ const Profile = () => {
     </>
   );
 }
+
 
 export default Profile

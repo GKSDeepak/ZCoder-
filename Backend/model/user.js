@@ -32,8 +32,8 @@ const userSchema = mongoose.Schema({
       friends: {
         type: [String]
       },
-      codeforceshandles :{
-        type : [String]
+      codeforceshandles:{
+        type:[String]
       }
 
 })
