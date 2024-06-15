@@ -1,4 +1,4 @@
-import React,{useContext,useState} from 'react'
+import React,{useContext,useState,useEffect} from 'react'
 import styles from './Profile.module.css'
 import axios from 'axios'
 import { AuthContext } from '../../AuthContext'
@@ -20,8 +20,15 @@ const Profile = () => {
   const [newLanguage, setNewLanguage] = useState('');
   const [newFriend, setNewFriend] = useState('');
   const {isAuthenticated,userLogin,isEdit,userr} = useAuthContext()
-
+  
+  
   const userId = userLogin.result._id; // Replace with actual user ID
+
+  useEffect(() => {
+    if (userId) {
+      fetchUserData();
+    }
+  }, [userId]);
 
   const fetchUserData = async () => {
     try {
@@ -150,9 +157,9 @@ const Profile = () => {
   return (
     <div className={styles.App}>
       <h1>User Profile</h1>
-      <div className={styles.loadbutton}>
+      {/* <div className={styles.loadbutton}>
       <button className={styles.loadbutton} onClick={fetchUserData}>Load User Data</button>
-      </div>
+      </div> */}
       {user && (
         <>
           <div className={styles['user-info']}>
