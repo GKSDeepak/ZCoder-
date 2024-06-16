@@ -23,7 +23,6 @@ connectToMongoDb('mongodb+srv://jajamabhijith2004:Devabhi2004@users.ralw0gb.mong
 
 
 
-const User = require('./model/user');
 
 
 
