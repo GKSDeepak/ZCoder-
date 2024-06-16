@@ -13,7 +13,8 @@ const Submissions = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedTags, setSelectedTags] = useState([]);
   const questionsPerPage = 40;
-  const [alertShown, setAlertShown] = useState(false);
+  // const [alertShown, setAlertShown] = useState(false);
+  const [message, setMessage] = useState('');
   const {userLogin,isAuthenticated} = useAuthContext()
 
 
@@ -23,6 +24,14 @@ const Submissions = () => {
     
     if (userLogin) {
       fetchSubmissions(userLogin.result._id);
+    }else{
+      if (!message) {
+        setMessage('You need to be logged in to view this page.');
+        setTimeout(() => {
+          navigate('/login'); // Redirect to login page or another appropriate page
+        }, 3000); // Redirect after 3 seconds
+      }
+      
     }
    
   }, [userLogin]); // Run the effect when the user object changes
@@ -69,7 +78,10 @@ const Submissions = () => {
     setCurrentPage(1);
   };
 
-  if (loading) {
+  if(message){
+    return <div className='loading'>Login to view this page</div>;
+  }
+  if (loading && !message) {
     return <div className='loading'>Loading...</div>;
   }
 

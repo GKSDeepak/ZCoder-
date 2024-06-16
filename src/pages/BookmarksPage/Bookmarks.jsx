@@ -15,23 +15,24 @@ const Bookmarks = () => {
   const [selectedTags, setSelectedTags] = useState([]);
   const questionsPerPage = 40;
   const { userLogin,isAuthenticated } = useAuthContext();
-  const [alertShown, setAlertShown] = useState(false);
+  // const [alertShown, setAlertShown] = useState(false);
+  const [message, setMessage] = useState('');
   // const [bookmarks, setBookmarks] = useState([]);
   console.log(userLogin);
 
   useEffect(() => {
-    // if(!isAuthenticated){
-    //   if (!alertShown) {
-    //     alert('You need to be logged in to view this page.');
-    //     setAlertShown(true);
-    //     navigate('/login'); // Redirect to login page or another appropriate page
-    //   }
-    //   return;
-    // }
     if (userLogin) {
       fetchBookmarkedQuestions(userLogin.result._id);
+    }else{
+      if (!message) {
+        setMessage('You need to be logged in to view this page.');
+        setTimeout(() => {
+          navigate('/login'); // Redirect to login page or another appropriate page
+        }, 3000); // Redirect after 3 seconds
+      }
+      
     }
-  }, [userLogin,alertShown,isAuthenticated]); // Run the effect when the user object changes
+  }, [userLogin]); // Run the effect when the user object changes
 
   const fetchBookmarkedQuestions = async (userId) => {
     try {
@@ -74,7 +75,10 @@ const Bookmarks = () => {
     setCurrentPage(1);
   };
 
-  if (loading) {
+  if(message){
+    return <div className='loading'>Login to view this page</div>;
+  }
+  if (loading && !message) {
     return <div className='loading'>Loading...</div>;
   }
 
@@ -88,7 +92,7 @@ const Bookmarks = () => {
 
     <>
     <div className='questions-list'>
-      
+        { loading && message && <p>{message}</p>}
       <TagFilter tags={allTags} selectedTags={selectedTags} onTagChange={handleTagChange} />
 
 

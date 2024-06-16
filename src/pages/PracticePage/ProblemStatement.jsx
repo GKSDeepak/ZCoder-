@@ -15,6 +15,7 @@ const ProblemStatement = () => {
   const [language, setLanguage] = useState('javascript'); // State to track selected language
   const [solutions, setSolutions] = useState([]);
   const [showSolutions, setShowSolutions] = useState(false);
+  const [showComments,setShowComments] = useState(false);
   const [activeSolution, setActiveSolution] = useState(null);
   const [comments, setComments] = useState({}); // State to store comments for a solution
   const [visibleComments, setVisibleComments] = useState(null);
@@ -221,25 +222,20 @@ const ProblemStatement = () => {
   };
 
   const fetchComments = async (solutionId) => {
+    if(showComments){
+      setShowComments(false);
+      return;
+    }
     try {
       const response = await fetch(`/user/comments/${solutionId}`);
       const data = await response.json();
       setComments((prevComments) => ({ ...prevComments, [solutionId]: data }));
+      setShowComments(true);
     } catch (error) {
       console.error('Error fetching comments:', error);
       alert('Failed to fetch comments');
     }
   };
-
-
-
-
-
-
-
-
-
-
 
   const fetchSolutions = async () => {
     if (showSolutions) {
@@ -290,6 +286,7 @@ const ProblemStatement = () => {
           </select>
           <button className={styles.button} onClick={handlePostSolution}>Post your solution</button>
           <button  className={`${styles.button} ${showSolutions ? styles.show : ''}`} onClick={fetchSolutions}>Solutions </button>
+          <button className={styles.button} onClick={()=>setShowSolutions(false)}>Go back </button>
         </div>
         {showSolutions ? (
           <div className={styles.solutionsList}>
@@ -310,14 +307,18 @@ const ProblemStatement = () => {
                   </SyntaxHighlighter>
                   <button className={styles.button} onClick={() => fetchComments(sol._id)}>View Comments</button> 
                   {/* Conditionally render comments based on availability */}
-                  {comments[sol._id] && (
+                  { showComments && comments[sol._id] && (
                     <div className={styles.comments}>
                       {/* Map through comments for this solution and display them */}
                       {comments[sol._id].map((comment) => (
                         <div key={comment._id} className={styles.comment}>
                           <p className={styles.commentContent}>{comment.content}</p>
                           {/* Optionally display username who posted the comment (if available) */}
-                          {comment.username && <p>Posted by: {comment.username}</p>}
+                          <div className={styles.userData}>
+                            {comment.username && <p>Posted by: {new Date(comment.createdAt).toLocaleString()}</p>}
+                            {comment.username && <p>Posted by: {comment.username}</p>}
+                          </div>
+                          
                         </div>
                       ))}
                       {/* Add a form to post a new comment */}
