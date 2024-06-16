@@ -194,39 +194,7 @@ const ProblemStatement = () => {
     } 
   };
 
-  const handlePostComment = async (solutionId, comment) => {
-    try {
-      const response = await fetch(`/user/comments/${solutionId}`, {
-        method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ content: comment, userId:userLogin.result._id, solutionId:solutionId, username : userLogin.result.username  }),
-      });
-      console.log(response);
-      if (response.ok) {
-        const newComment = await response.json();
-        setComments((prevComments) => ({ ...prevComments, [solutionId]: [...(prevComments[solutionId] || []), newComment] }));
-        // Update comments state for the specific solution
-      } else {
-        alert('Failed to post comment');
-      }
-    } catch (error) {
-      console.error('Error posting comment:', error);
-      alert('Failed to post comment');
-    }
-  };
-
-  const fetchComments = async (solutionId) => {
-    try {
-      const response = await fetch(`/user/comments/${solutionId}`);
-      const data = await response.json();
-      setComments((prevComments) => ({ ...prevComments, [solutionId]: data }));
-    } catch (error) {
-      console.error('Error fetching comments:', error);
-      alert('Failed to fetch comments');
-    }
-  };
+ 
     
 
 
