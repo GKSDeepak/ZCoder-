@@ -103,7 +103,9 @@ app.get('/user/:id', async (req, res) => {
     try {
       // const userId = req.params.userId; // Replace with actual user ID retrieval method
       const handle = req.body.handle;
+      console.log(handle);
       const user = await User.findById(req.params.id);
+      console.log(user);
       if (!user.codeforceshandles.includes(handle)) {
         user.codeforceshandles.push(handle);
         await user.save();

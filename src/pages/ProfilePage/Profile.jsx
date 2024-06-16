@@ -330,7 +330,7 @@ const Profile = () => {
                   className={styles.pinput}
                 />
                 <button className={styles.pbutton}onClick={handleAddHandle} >
-                  Add Handle
+                  Add Codeforces Handle
                 </button>
               </div>
               {message && <p>{message}</p>}
@@ -345,5 +345,6 @@ const Profile = () => {
     </>
   );
 }
+
 
 export default Profile
