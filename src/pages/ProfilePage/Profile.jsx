@@ -9,7 +9,6 @@ import { useAuthContext } from '../../hooks/useAuthContext'
 // import { useNavigate } from 'react-router-dom'
 const Profile = () => {
  
-  // const [user, setUser] = useState(null);
   const [techStacks, setTechStacks] = useState([]);
   const [languages, setLanguages] = useState([]);
   const [friends, setFriends] = useState([]);
@@ -20,6 +19,7 @@ const Profile = () => {
   const [newLanguage, setNewLanguage] = useState('');
   const [newFriend, setNewFriend] = useState('');
   const {isAuthenticated,userLogin,isEdit,userr} = useAuthContext()
+
   const [handle, setHandle] = useState('');
   const [handles, setHandles] = useState([]);
   
@@ -36,6 +36,7 @@ const Profile = () => {
     try {
       const response = await axios.get(`http://localhost:8008/user/${userId}`);
       // setUser(response.data);
+
       setTechStacks(response.data.techStacks);
       setLanguages(response.data.languages);
       setFriends(response.data.friends);
@@ -45,11 +46,13 @@ const Profile = () => {
     }
   };
 
+
   const handleDeleteTechStack = async ( index) => {
     try {
       const updatedStacks = [...techStacks];
       updatedStacks.splice(index, 1);
       await axios.put(`http://localhost:8008/user/${userLogin.result._id}/techstacks`, { techStacks: updatedStacks });
+
       setTechStacks(updatedStacks);
       setMessage('Tech stack deleted successfully');
     } catch (error) {
@@ -61,7 +64,9 @@ const Profile = () => {
     try {
       const updatedStacks = [...techStacks];
       updatedStacks[index] = updatedStack;
+
       await axios.put(`http://localhost:8008/user/${userLogin.result._id}/techstacks`, { techStacks: updatedStacks });
+
       setTechStacks(updatedStacks);
       setMessage('Tech stack updated successfully');
     } catch (error) {
@@ -73,7 +78,9 @@ const Profile = () => {
     if (newTechStack === '') return;
     try {
       const updatedStacks = [...techStacks, newTechStack];
+
       await axios.put(`http://localhost:8008/user/${userLogin.result._id}/techstacks`, { techStacks: updatedStacks });
+
       setTechStacks(updatedStacks);
       setNewTechStack('');
       setMessage('Tech stack added successfully');
@@ -86,7 +93,9 @@ const Profile = () => {
     try {
       const updatedLanguages = [...languages];
       updatedLanguages.splice(index, 1);
+h
       await axios.put(`http://localhost:8008/user/${userLogin.result._id}/languages`, { languages: updatedLanguages });
+
       setLanguages(updatedLanguages);
       setMessage('Language deleted successfully');
     } catch (error) {
@@ -94,11 +103,13 @@ const Profile = () => {
     }
   };
 
+
   const handleEditLanguage = async ( index, updatedLanguage) => {
     try {
       const updatedLanguages = [...languages];
       updatedLanguages[index] = updatedLanguage;
       await axios.put(`http://localhost:8008/user/${userLogin.result._id}/languages`, { languages: updatedLanguages });
+
       setLanguages(updatedLanguages);
       setMessage('Language updated successfully');
     } catch (error) {
@@ -110,7 +121,9 @@ const Profile = () => {
     if (newLanguage === '') return;
     try {
       const updatedLanguages = [...languages, newLanguage];
+
       await axios.put(`http://localhost:8008/user/${userLogin.result._id}/languages`, { languages: updatedLanguages });
+
       setLanguages(updatedLanguages);
       setNewLanguage('');
       setMessage('Language added successfully');
@@ -119,6 +132,7 @@ const Profile = () => {
     }
   };
 
+
   const handleDeleteFriend = async ( friendUsername) => {
     try {
       const updatedFriends = friends.filter(friend => friend !== friendUsername);
@@ -126,6 +140,7 @@ const Profile = () => {
       setFriends(updatedFriends);
       alert('Friend deleted successfully')
       // setMessage('Friend deleted successfully');
+
     } catch (error) {
       setMessage('Error deleting friend');
     }
@@ -149,6 +164,7 @@ const Profile = () => {
     if (!searchResult) return;
     try {
       const friendUsername = searchResult.username;
+
       await axios.put(`http://localhost:8008/user/${userLogin.result._id}/add-friend`, { friendUsername });
       setFriends([...friends, friendUsername]);
       // setMessage('Friend added successfully');
@@ -205,10 +221,12 @@ const Profile = () => {
       setMessage('Handle deleted successfully');
     } catch (error) {
       setMessage('Error deleting handle from the database');
+
     }
   };
 
   return (
+
     <>
     <h1 className={styles.title}>User Profile</h1>
     <div className={styles.Appp}>
@@ -343,6 +361,7 @@ const Profile = () => {
       )}
     </div>
     </>
+
   );
 }
 

@@ -9,7 +9,8 @@ const HomePage = () => {
   const [recentlyCompletedContests, setRecentlyCompletedContests] = useState([]);
   const [value, setValue] = useState(new Date());
   const [loading, setLoading] = useState(true);
-  const [selectedContest, setSelectedContest] = useState(null);
+
+
   const [selectedDateContests, setSelectedDateContests] = useState([]);
 
   useEffect(() => {

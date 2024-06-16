@@ -2,16 +2,12 @@
   display: flex;
   flex-direction: row;
   height: 100vh;
-  background-color:var(--practice-background);
 }
-.title{
-  color: var(--ques-text);
-  font-size: 30px;
-  padding-bottom: 20px;
-}
+
 .problemStatement {
-  color:var(--ques-text);
+  width: 50%;
   padding: 20px;
+
   border-radius: 5px;
   border-right:1px solid var(--ques-text);
   width: 800px;
@@ -19,14 +15,7 @@
 }
 .problemStatement::-webkit-scrollbar {
   display: none;  /* Hide scrollbar for webkit browsers */
-}
 
-.problemStatement {
-  width: 50%;
-  padding: 20px;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  overflow-y: auto;
 }
 
 .solutionEditor {
@@ -81,6 +70,24 @@
 .solutionContent.show {
   display: block;
 }
+
+.solutionInput {
+  flex-grow: 1;
+  padding: 10px;
+  background-color: var(--input-bg-color);
+  color: var(--input-text-color);
+  border: none;
+  resize: none;
+  height: calc(100vh - 100px); /* Adjust height as needed */
+}
+
+.comments {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: var(--comments-bg-color);
+  color: var(--comments-text-color);
+}
+
 
 
 

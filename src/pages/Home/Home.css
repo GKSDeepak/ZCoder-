@@ -101,13 +101,15 @@ html, body {
   text-decoration: underline;
 }
 
+
+
 .calender {
   background-color: var(--calender-bg);
   color: var(--calender-color);
   border-radius: 10px;
 }
 .contest-dot {
-  height: 8px;
+   height: 8px;
   width: 8px;
   background-color: black;
   border-radius: 50%;
@@ -148,4 +150,7 @@ html, body {
 .selected-date-contests a:hover {
   text-decoration: underline;
 }
+ 
+
+
 

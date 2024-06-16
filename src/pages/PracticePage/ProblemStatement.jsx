@@ -40,6 +40,7 @@ const ProblemStatement = () => {
         const data = await response.json();
         console.log(data)
 
+
         // Extract all solutionIds from the data
         const allSolutionIds = data.reduce((acc, bookmark) => {
           bookmark.solutions.forEach(solution => {
@@ -288,8 +289,10 @@ const ProblemStatement = () => {
             <option value="cpp">C++</option>
           </select>
           <button className={styles.button} onClick={handlePostSolution}>Post your solution</button>
+
           <button  className={`${styles.button} ${showSolutions ? styles.show : ''}`} onClick={fetchSolutions}>Solutions </button>
           <button className={styles.button} onClick={()=>setShowSolutions(false)}>Go back </button>
+
         </div>
         {showSolutions ? (
           <div className={styles.solutionsList}>
