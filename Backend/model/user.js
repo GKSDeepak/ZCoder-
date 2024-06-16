@@ -31,11 +31,12 @@ const userSchema = mongoose.Schema({
       },
       friends: {
         type: [String]
+
+      },
+      codeforceshandles:{
+        type:[String]
       }
-
-
-//    // dateOfBirth:Date,
-
+      
 })
 
 const User = mongoose.model('User', userSchema);

@@ -49,6 +49,7 @@ body{
   background-size: cover; 
   background-repeat: repeat;
   background:var(--background-color); 
+  font-family: Arial, sans-serif;
 }
 html,body,#root{
   

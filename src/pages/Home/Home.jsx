@@ -8,6 +8,9 @@ const HomePage = () => {
   const [upcomingContests, setUpcomingContests] = useState([]);
   const [recentlyCompletedContests, setRecentlyCompletedContests] = useState([]);
   const [value, setValue] = useState(new Date());
+  const [loading, setLoading] = useState(true);
+
+
   const [selectedDateContests, setSelectedDateContests] = useState([]);
 
   useEffect(() => {
@@ -28,6 +31,8 @@ const HomePage = () => {
         setRecentlyCompletedContests(completedResponse.data.objects);
       } catch (error) {
         console.error('Error fetching contests:', error);
+      }finally {
+        setLoading(false);
       }
     };
 
@@ -41,6 +46,12 @@ const HomePage = () => {
     setSelectedDateContests(contestsOnDate);
   };
 
+  if (loading) {
+    return <div className='loading'>Loading...</div>;
+  }
+
+  
+
   return (
     <div className="homepage">
       <header className="hero-section">
@@ -50,21 +61,24 @@ const HomePage = () => {
       
       <section className="contests-section">
         <div className="recent-contests">
-          <h2 className="subheading">Recently Completed Contests</h2>
-          <ul className="contests-list">
-            {recentlyCompletedContests.map((contest) => (
-              <li key={contest.id} className="contest-item">
-                <a href={contest.href} target="_blank" rel="noopener noreferrer">
-                  {contest.event} - {new Date(contest.start).toLocaleString()} (Duration: {Math.floor(contest.duration / 3600)} hours)
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
+
+            <h2 className="subheading">Recently Completed Contests</h2>
+            <ul className="contests-list">
+              {recentlyCompletedContests.map((contest) => (
+                <li key={contest.id} className="contest-item">
+                  <a href={contest.href} target="_blank" rel="noopener noreferrer">
+                    {contest.event} - {new Date(contest.start).toLocaleString()} (Duration: {Math.floor(contest.duration / 3600)} hours)
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+    
 
         <div className="calendar-container">
           <h2 className="subheading">Upcoming Contests</h2>
           <Calendar
+           className='calender'
             onChange={setValue}
             value={value}
             onClickDay={onDateClick}
@@ -77,13 +91,14 @@ const HomePage = () => {
               }
             }}
           />
+          <p>Dot represents a contest</p>
           {selectedDateContests.length > 0 && (
             <div className="selected-date-contests">
               <h3>Contests on {value.toDateString()}</h3>
               <ul>
                 {selectedDateContests.map((contest) => (
                   <li key={contest.id}>
-                    <a href={contest.href} target="_blank" rel="noopener noreferrer">
+                    <a href={contest.href} target="_blank" rel="noopener noreferrer" className='details'>
                       {contest.event} - {new Date(contest.start).toLocaleString()} (Duration: {Math.floor(contest.duration / 3600)} hours)
                     </a>
                   </li>
@@ -93,8 +108,6 @@ const HomePage = () => {
           )}
         </div>
       </section>
-
-     
     </div>
   );
 };

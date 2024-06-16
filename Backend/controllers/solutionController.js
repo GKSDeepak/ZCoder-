@@ -1,19 +1,5 @@
 const Solution = require('../model/solution');
 
-// const postSolution = async (req, res) => {
-//   const { titleSlug, solution, language, userId } = req.body;
-//   try {
-//     const newSolution = new Solution({ userId, titleSlug, solution, language });
-//     if (newSolution.solution) {
-//       await newSolution.save();
-//       res.status(201).json({ msg: 'Solution posted successfully' });
-//     } else {
-//       res.status(300).json({ msg: 'Nothing is posted' });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: error.message });
-//   }
-// };
 
 const postSolution = async (req, res) => {
   const { userId, titleSlug, title, solution, language, username, topicTags} = req.body;
@@ -28,8 +14,6 @@ const postSolution = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
-
-
 
 const getSolutionsByTitleSlug = async (req, res) => {
   const { titleSlug } = req.params;

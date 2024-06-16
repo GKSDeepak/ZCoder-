@@ -7,9 +7,15 @@
 .problemStatement {
   width: 50%;
   padding: 20px;
-  background-color: var(--bg-color);
-  color: var(--text-color);
-  overflow-y: auto;
+
+  border-radius: 5px;
+  border-right:1px solid var(--ques-text);
+  width: 800px;
+  overflow: auto; /* Allow vertical scrolling if content exceeds the container */
+}
+.problemStatement::-webkit-scrollbar {
+  display: none;  /* Hide scrollbar for webkit browsers */
+
 }
 
 .solutionEditor {
@@ -82,37 +88,58 @@
   color: var(--comments-text-color);
 }
 
-.comment {
-  margin-bottom: 10px;
+
+
+
+
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  margin-top: 10px;
+  padding: 10px;
+  transition: max-height 0.5s ease-in-out;
+  gap: 30px;
 }
 
+.comment {
+  margin-bottom: 10px;
+  border: 1px solid var(--ques-text);
+  background-color: var(--practice-background);
+  display: flex;
+  /* align-items: center; */
+
+  justify-content: space-between;
+  margin: 0 5px;
+  padding: 0 5px;
+}
+
+.comment p{
+  padding-top: 5px;
+}
+
+.userData{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 5px;
+}
+
+.commentContent {
+  
+  white-space: pre-wrap; /* Ensures that whitespace is preserved */
+  word-wrap: break-word; /* Ensures long words break to fit within the container */
+}
+
+
 textarea[name="commentInput"] {
+  min-height: 200px;
   width: 100%;
   padding: 10px;
   margin-top: 5px;
-  background-color: var(--input-bg-color);
-  color: var(--input-text-color);
   border: 1px solid #ccc;
-}
+  resize: none;
+  background-color:var(--practice-background);
+  color: var(--ques-text);
 
-:root {
-  --bg-color: #fff;
-  --text-color: #000;
-  --editor-bg-color: #f7f7f7;
-  --item-bg-color: #fff;
-  --input-bg-color: #fff;
-  --input-text-color: #000;
-  --comments-bg-color: #f1f1f1;
-  --comments-text-color: #000;
-}
-
-[data-theme="dark"] {
-  --bg-color: #1e1e1e;
-  --text-color: #d4d4d4;
-  --editor-bg-color: #1e1e1e;
-  --item-bg-color: #252526;
-  --input-bg-color: #333;
-  --input-text-color: #d4d4d4;
-  --comments-bg-color: #333;
-  --comments-text-color: #d4d4d4;
 }

@@ -5,10 +5,28 @@
 }
 
 :root {
-  --bg-color: rgb(17, 0, 255);
-  --primary-color: #1e90ff;
-  --secondary-color: #f0f0f0;
   --hover-color: rgb(130, 130, 152);
+  --header-bg:black;
+  --hero-title:white;
+  --title-tag:#1e90ff;
+  --container-bg:rgba(0, 0, 0, 0.8);
+  --contest-a:#1e90ff;
+  --calender-bg:rgb(148, 177, 227);
+  --calender-color:white;
+}
+
+[data-theme="light"]{
+  --header-bg:#5babfc;
+  --hero-title:black;
+  --title-tag:#ffffff;
+  --container-bg:white;
+  --contest-a:rgb(22, 77, 187);
+  --calender-bg:  rgb(193, 219, 246) ;
+  --calender-color:black;
+}
+
+html, body {
+  color: var(--secondary-color);
 }
 
 html, body {
@@ -22,19 +40,19 @@ html, body {
 .hero-section {
   text-align: center;
   padding: 2rem;
-  background: rgba(0, 0, 0, 0.8);
+  background: var(--header-bg);
   margin-bottom: 2rem;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
 }
 
 .hero-title {
   font-size: 2.5rem;
-  color: aliceblue;
+  color: var(--hero-title);
 }
 
 .hero-tagline {
   font-size: 1.25rem;
-  color: var(--primary-color);
+  color: var(--title-tag);
 }
 
 .contests-section {
@@ -45,13 +63,24 @@ html, body {
   gap: 2rem;
 }
 
+
+.subheading{
+  color: var(--hero-title);
+  margin-bottom: 15px;
+}
 .calendar-container, .recent-contests {
-  background-color: rgba(0, 0, 0, 0.8);
+  background-color: var(--container-bg);
+
   padding: 2rem;
   border-radius: 10px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  box-shadow: 0 10px 30px var(--container-bg);
   width: 45%;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
 }
 
 .contests-list {
@@ -64,7 +93,7 @@ html, body {
 }
 
 .contest-item a {
-  color: var(--primary-color);
+  color: var(--contest-a);
   text-decoration: none;
   transition: color 0.3s;
 }
@@ -74,23 +103,34 @@ html, body {
   text-decoration: underline;
 }
 
+
+
+.calender {
+  background-color: var(--calender-bg);
+  color: var(--calender-color);
+  border-radius: 10px;
+}
 .contest-dot {
-  height: 8px;
+   height: 8px;
   width: 8px;
-  background-color: var(--primary-color);
+  background-color: black;
   border-radius: 50%;
   display: inline-block;
   margin-top: 5px;
 }
 
 .selected-date-contests {
-  background-color: rgba(0, 0, 0, 0.9);
+
+ 
   padding: 1rem;
-  border-radius: 5px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
   margin-top: 1rem;
-  text-align: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
 }
+
+
 
 .selected-date-contests h3 {
   margin-bottom: 1rem;
@@ -106,33 +146,14 @@ html, body {
 }
 
 .selected-date-contests a {
-  color: var(--primary-color);
+  color: var(--hero-title);
   text-decoration: none;
 }
 
 .selected-date-contests a:hover {
   text-decoration: underline;
 }
+ 
 
-.footer {
-  text-align: center;
-  padding: 2rem;
-  background: rgba(0, 0, 0, 0.8);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
-  margin-top: 2rem;
-}
 
-.footer p {
-  color: var(--secondary-color);
-}
 
-.social-links a {
-  color: var(--secondary-color);
-  margin: 0 1rem;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.social-links a:hover {
-  color: var(--primary-color);
-}
