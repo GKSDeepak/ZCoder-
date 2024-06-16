@@ -2,6 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import TagFilter from '../../components/TagFilter/TagFilter';
+import Pagination from '../../components/Pagination/Pagination';
 import './Questions.css';
 
 const Questions = () => {
@@ -15,7 +17,7 @@ const Questions = () => {
   useEffect(() => {
     const fetchProblems = async () => {
       try {
-        const response = await fetch(`https://alfa-leetcode-api.onrender.com/problems?limit=${50}`);
+        const response = await fetch(`https://alfa-leetcode-api.onrender.com/problems?limit=${20}`);
         const data = await response.json();
         setProblems(data.problemsetQuestionList);
       } catch (error) {
@@ -40,8 +42,17 @@ const Questions = () => {
 
   // Slice the filtered problems array to get the questions for the current page
   const currentQuestions = filteredProblems.slice(indexOfFirstQuestion, indexOfLastQuestion);
-
+  const allTags = [...new Set(problems.flatMap(problem => problem.topicTags.map(tag => tag.name)))];
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleTagChange = (tag) => {
+    setSelectedTags(prevSelectedTags =>
+      prevSelectedTags.includes(tag)
+        ? prevSelectedTags.filter(t => t !== tag)
+        : [...prevSelectedTags, tag]
+    );
+    setCurrentPage(1);
+  };
 
   if (loading) {
     return <div className='loading'>Loading...</div>;
@@ -50,40 +61,42 @@ const Questions = () => {
   if (error) {
     return <div>{error}</div>;
   }
-
-  // Calculate the total number of pages
   const totalPages = Math.ceil(filteredProblems.length / questionsPerPage);
+  // // Calculate the total number of pages
+  // const totalPages = Math.ceil(filteredProblems.length / questionsPerPage);
 
-  // Determine the range of pagination buttons to display
-  let startPage = 1;
-  let endPage = totalPages;
-  if (totalPages > 4) {
-    if (currentPage <= 2) {
-      endPage = 4;
-    } else if (currentPage >= totalPages - 1) {
-      startPage = totalPages - 3;
-    } else {
-      startPage = currentPage - 1;
-      endPage = currentPage + 1;
-    }
-  }
+  // // Determine the range of pagination buttons to display
+  // let startPage = 1;
+  // let endPage = totalPages;
+  // if (totalPages > 4) {
+  //   if (currentPage <= 2) {
+  //     endPage = 4;
+  //   } else if (currentPage >= totalPages - 1) {
+  //     startPage = totalPages - 3;
+  //   } else {
+  //     startPage = currentPage - 1;
+  //     endPage = currentPage + 1;
+  //   }
+  // }
 
-  // Get unique tags
-  const allTags = [...new Set(problems.flatMap(problem => problem.topicTags.map(tag => tag.name)))];
+  // // Get unique tags
+  // const allTags = [...new Set(problems.flatMap(problem => problem.topicTags.map(tag => tag.name)))];
 
-  const handleTagChange = (tag) => {
-    setSelectedTags(prevSelectedTags =>
-      prevSelectedTags.includes(tag)
-        ? prevSelectedTags.filter(t => t !== tag)
-        : [...prevSelectedTags, tag]
-    );
-    setCurrentPage(1); // Reset to the first page when the filter changes
-  };
+  // const handleTagChange = (tag) => {
+  //   setSelectedTags(prevSelectedTags =>
+  //     prevSelectedTags.includes(tag)
+  //       ? prevSelectedTags.filter(t => t !== tag)
+  //       : [...prevSelectedTags, tag]
+  //   );
+  //   setCurrentPage(1); // Reset to the first page when the filter changes
+  // };
 
   return (
+    <>
     <div className="questions-list">
       {/* Tag Filter Checkboxes */}
-      <div className="tag-filters">
+      <TagFilter tags={allTags} selectedTags={selectedTags} onTagChange={handleTagChange} />
+      {/* <div className="tag-filters">
         {allTags.map(tag => (
           <label key={tag}>
             <input
@@ -95,23 +108,31 @@ const Questions = () => {
             <span>{tag}</span>
           </label>
         ))}
-      </div>
+      </div> */}
+
 
       {currentQuestions.map((problem, index) => (
         <div key={index} className="question-item">
           <Link to={`/practice/${problem.titleSlug}`} >
             {problem.title}
           </Link>
-          <div className="tags">
-            {problem.topicTags.map((tag, tagIndex) => (
-              <span key={tagIndex} className="tag">{tag.name}</span>
-            ))}
-          </div>
+          
+            <div className="tags">
+              
+                {problem.topicTags.map((tag, tagIndex) => (
+                  <span key={tagIndex} className="tag">{tag.name}</span>
+                ))}
+              
+              
+           </div>
+          
+          
         </div>
       ))}
 
       {/* Pagination Controls */}
-      <div className="pagination">
+      
+      {/* <div className="pagination">
         <button onClick={() => paginate(1)}>First</button>
         {startPage > 1 && <span>...</span>}
         {Array.from({ length: endPage - startPage + 1 }).map((_, index) => (
@@ -125,8 +146,10 @@ const Questions = () => {
         ))}
         {endPage < totalPages && <span>...</span>}
         <button onClick={() => paginate(totalPages)}>Last</button>
-      </div>
+      </div> */}
     </div>
+    <Pagination currentPage={currentPage} totalPages={totalPages} paginate={paginate} />
+  </>
   );
 };
 

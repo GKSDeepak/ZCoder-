@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const User = require('./model/user');
 const app = express();
 const { connectToMongoDb }= require('./config/db')
 const port = 8008;
@@ -16,10 +17,6 @@ app.use(cors());
 connectToMongoDb('mongodb+srv://jajamabhijith2004:Devabhi2004@users.ralw0gb.mongodb.net/backend').then(()=>{
     console.log('mongo connecrted')
 })
-
-
-const User = require('./model/user');
-
 
 
 app.get('/user/:id', async (req, res) => {
@@ -90,6 +87,48 @@ app.get('/user/:id', async (req, res) => {
       res.status(500).json({ message: 'Error adding friend', error });
     }
   });
+
+  app.get('/user/:id/handles', async (req, res) => {
+    try {
+      // const userId = req.query.userId; // Replace with actual user ID retrieval method
+      // const user = await User.findById(userId);
+      const user = await User.findById(req.params.id);
+      res.json(user.codeforceshandles);
+    } catch (error) {
+      res.status(500).json({ message: 'Error fetching handles' });
+    }
+  });
+  
+  app.post('/user/:id/handles', async (req, res) => {
+    try {
+      // const userId = req.params.userId; // Replace with actual user ID retrieval method
+      const handle = req.body.handle;
+      console.log(handle);
+      const user = await User.findById(req.params.id);
+      console.log(user);
+      if (!user.codeforceshandles.includes(handle)) {
+        user.codeforceshandles.push(handle);
+        await user.save();
+      }
+      res.status(201).json(user.codeforceshandles);
+    } catch (error) {
+      res.status(500).json({ message: 'Error adding handle' });
+    }
+  });
+  
+  app.delete('/user/:id/handles/:handle', async (req, res) => {
+    try {
+
+      const handleToDelete = req.params.handle;
+      const user = await User.findById(req.params.id);
+      user.codeforceshandles = user.codeforceshandles.filter(handle => handle !== handleToDelete);
+      await user.save();
+      res.status(204).end();
+    } catch (error) {
+      res.status(500).json({ message: 'Error deleting handle' });
+    }
+  });
+
 
 app.use('/user', userRouter);
 app.use('/user',postRouter);
