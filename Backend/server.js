@@ -1,8 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-
 const User = require('./model/user');
-
 const app = express();
 const { connectToMongoDb }= require('./config/db')
 const port = 8008;
@@ -19,13 +17,6 @@ app.use(cors());
 connectToMongoDb('mongodb+srv://jajamabhijith2004:Devabhi2004@users.ralw0gb.mongodb.net/backend').then(()=>{
     console.log('mongo connecrted')
 })
-
-
-
-
-const User = require('./model/user');
-
-
 
 
 app.get('/user/:id', async (req, res) => {
@@ -97,7 +88,6 @@ app.get('/user/:id', async (req, res) => {
     }
   });
 
-
   app.get('/user/:id/handles', async (req, res) => {
     try {
       // const userId = req.query.userId; // Replace with actual user ID retrieval method
@@ -138,7 +128,6 @@ app.get('/user/:id', async (req, res) => {
       res.status(500).json({ message: 'Error deleting handle' });
     }
   });
-
 
 
 app.use('/user', userRouter);

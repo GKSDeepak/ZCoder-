@@ -1,16 +1,13 @@
-*{
+/* *{
   margin: 0;
   padding: 0;
   box-sizing: border-box;
   border: none;
 }
-html,body{
+html,body,#root{
   background:linear-gradient(#000,rgb(17, 0, 255),#000); 
   height: 100%;
   width: 100%;
-  font-family: Arial, sans-serif;
-  color: #f0f0f0;
-  line-height: 1.6;
 }
 
 a {
@@ -62,11 +59,9 @@ a {
   text-decoration: none;
 }
 
-li {
+li{
   list-style: none;
 }
-
 pre{
   padding: 0;
 }
-

@@ -1,4 +1,3 @@
-
 :root{
   --txt-color:#333;
   --input-boxColor:white;
@@ -11,6 +10,16 @@
   --txt-color:white;
 
 }
+
+
+
+
+
+
+
+
+
+
 
 
 .Appp {
@@ -80,7 +89,6 @@
   white-space: nowrap;
 }
 .searchUser{
-
   display: flex;
   align-items: center;
   gap: 5px;
@@ -129,10 +137,8 @@
   white-space: nowrap;
 }
 
-
 .pbutton:hover {
   background-color: var(--button-hovr);
-
 }
 
 .pinput[type="text"] {
@@ -143,7 +149,6 @@
   width: 100%;
   box-sizing: border-box;
 }
-
 
 .ph2 {
   margin: 15px 0;
@@ -171,4 +176,3 @@
   display: flex;
   align-items: center;
 }
-
