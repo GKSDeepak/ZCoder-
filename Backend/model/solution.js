@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const solutionSchema = new mongoose.Schema({
+
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
@@ -41,6 +42,7 @@ const solutionSchema = new mongoose.Schema({
   ],
 },{
   timestamps:true
+
 });
 
 

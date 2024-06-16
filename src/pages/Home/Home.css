@@ -1,3 +1,9 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
   --hover-color: rgb(130, 130, 152);
   --header-bg:black;
@@ -20,6 +26,14 @@
 }
 
 html, body {
+  color: var(--secondary-color);
+}
+
+html, body {
+  background: linear-gradient(#000, var(--bg-color), #000); 
+  height: 100%;
+  width: 100%;
+  font-family: Arial, sans-serif;
   color: var(--secondary-color);
 }
 
@@ -49,12 +63,14 @@ html, body {
   gap: 2rem;
 }
 
+
 .subheading{
   color: var(--hero-title);
   margin-bottom: 15px;
 }
 .calendar-container, .recent-contests {
   background-color: var(--container-bg);
+
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 10px 30px var(--container-bg);
@@ -87,13 +103,15 @@ html, body {
   text-decoration: underline;
 }
 
+
+
 .calender {
   background-color: var(--calender-bg);
   color: var(--calender-color);
   border-radius: 10px;
 }
 .contest-dot {
-  height: 8px;
+   height: 8px;
   width: 8px;
   background-color: black;
   border-radius: 50%;
@@ -102,6 +120,7 @@ html, body {
 }
 
 .selected-date-contests {
+
  
   padding: 1rem;
   margin-top: 1rem;
@@ -134,4 +153,7 @@ html, body {
 .selected-date-contests a:hover {
   text-decoration: underline;
 }
+ 
+
+
 

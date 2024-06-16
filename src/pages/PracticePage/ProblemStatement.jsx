@@ -6,6 +6,7 @@ import styles from './ProblemStatement.module.css'
 import { IoIosArrowDown,IoIosArrowUp, IoMdBookmark } from "react-icons/io";
 import {useAuthContext} from '../../hooks/useAuthContext';
 
+
 const ProblemStatement = () => {
   const { titleSlug } = useParams();
   const [problem, setProblem] = useState(null);
@@ -18,6 +19,7 @@ const ProblemStatement = () => {
   const [showComments,setShowComments] = useState(false);
   const [activeSolution, setActiveSolution] = useState(null);
   const [comments, setComments] = useState({}); // State to store comments for a solution
+
   const [visibleComments, setVisibleComments] = useState(null);
   const [alertShown, setAlertShown] = useState(false);
   
@@ -38,6 +40,7 @@ const ProblemStatement = () => {
       if (response.ok) {
         const data = await response.json();
         console.log(data)
+
 
         // Extract all solutionIds from the data
         const allSolutionIds = data.reduce((acc, bookmark) => {
@@ -190,6 +193,40 @@ const ProblemStatement = () => {
       }
     } 
   };
+
+  const handlePostComment = async (solutionId, comment) => {
+    try {
+      const response = await fetch(`/user/comments/${solutionId}`, {
+        method: 'POST',
+        headers: { 
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: comment, userId:userLogin.result._id, solutionId:solutionId, username : userLogin.result.username  }),
+      });
+      console.log(response);
+      if (response.ok) {
+        const newComment = await response.json();
+        setComments((prevComments) => ({ ...prevComments, [solutionId]: [...(prevComments[solutionId] || []), newComment] }));
+        // Update comments state for the specific solution
+      } else {
+        alert('Failed to post comment');
+      }
+    } catch (error) {
+      console.error('Error posting comment:', error);
+      alert('Failed to post comment');
+    }
+  };
+
+  const fetchComments = async (solutionId) => {
+    try {
+      const response = await fetch(`/user/comments/${solutionId}`);
+      const data = await response.json();
+      setComments((prevComments) => ({ ...prevComments, [solutionId]: data }));
+    } catch (error) {
+      console.error('Error fetching comments:', error);
+      alert('Failed to fetch comments');
+    }
+  };
     
 
 
@@ -285,8 +322,10 @@ const ProblemStatement = () => {
             <option value="cpp">C++</option>
           </select>
           <button className={styles.button} onClick={handlePostSolution}>Post your solution</button>
+
           <button  className={`${styles.button} ${showSolutions ? styles.show : ''}`} onClick={fetchSolutions}>Solutions </button>
           <button className={styles.button} onClick={()=>setShowSolutions(false)}>Go back </button>
+
         </div>
         {showSolutions ? (
           <div className={styles.solutionsList}>
@@ -294,17 +333,20 @@ const ProblemStatement = () => {
               <div key={sol._id} className={styles.solutionItem}>
                 <div className={styles.solutionHeader} onClick={() => toggleSolution(sol._id)}>
                   <p><strong>Language used:</strong> {sol.language}</p>
-                  <p>Posted by:{sol.username}</p>
+                  <p>Posted by: {sol.username || 'Anonymous'}</p>  {/* Display 'Anonymous' if username is missing */}
                   <p><strong>Posted at:</strong> {new Date(sol.createdAt).toLocaleString()}</p>
+
                   {/* <IoMdBookmark className={`${styles.icon} ${bookmarks.solutions.some(solution => solution.solutionId === sol._id)? styles.bookmarkIcon : ''}`} onClick={() => handleBookmark(sol)} /> */}
                   
                   <IoMdBookmark className={`${styles.icon} ${bookmarks.includes(sol._id)? styles.bookmarkIcon : ''}`} onClick={() => handleBookmark(sol)} />
                   {activeSolution === sol._id ? <IoIosArrowDown className={styles.icon}/> : <IoIosArrowUp className={styles.icon} /> }
                 </div>  
+
                 <div className={`${styles.solutionContent} ${activeSolution === sol._id ? styles.show : ''}`}>
-                  <SyntaxHighlighter language={sol.language} style={okaidia} >
+                  <SyntaxHighlighter language={sol.language} style={okaidia}>
                     {sol.solution}
                   </SyntaxHighlighter>
+
                   <button className={styles.button} onClick={() => fetchComments(sol._id)}>View Comments</button> 
                   {/* Conditionally render comments based on availability */}
                   { showComments && comments[sol._id] && (
@@ -319,6 +361,7 @@ const ProblemStatement = () => {
                             {comment.username && <p>Posted by: {comment.username}</p>}
                           </div>
                           
+
                         </div>
                       ))}
                       {/* Add a form to post a new comment */}
@@ -329,11 +372,13 @@ const ProblemStatement = () => {
                         e.target.elements.commentInput.value = '';
                       }}>
                         <textarea name="commentInput" placeholder="Write your comment here..." />
+
                         <button className={styles.button} type="submit">Post Comment</button>
                       </form>
                     </div>
                   )}
                 </div>   
+
               </div>
             ))}
           </div>
@@ -349,6 +394,7 @@ const ProblemStatement = () => {
       </div>
     </div>
   );
+
 }
 
 export default ProblemStatement;

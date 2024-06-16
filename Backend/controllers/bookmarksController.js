@@ -34,7 +34,6 @@ exports.addBookmark = async (req, res) => {
 };
 
 
-
 exports.deleteBookmark = async (req, res) => {
   const { userId, titleSlug, id } = req.params;
   try {

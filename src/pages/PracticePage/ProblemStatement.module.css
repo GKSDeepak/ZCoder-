@@ -1,30 +1,13 @@
-:root{
-  --practice-background:black;
-  --ques-text:white;
-}
-
-[data-theme="light"]{
-  --practice-background:linear-gradient(#5ab8ee,rgb(255, 255, 255),#5ab8ee);
-  --ques-text:black;
-}
-
-
-
 .problemStatementContainer {
   display: flex;
-  gap: 50px;
-  width: 100%;
+  flex-direction: row;
   height: 100vh;
-  background-color:var(--practice-background);
 }
-.title{
-  color: var(--ques-text);
-  font-size: 30px;
-  padding-bottom: 20px;
-}
+
 .problemStatement {
-  color:var(--ques-text);
+  width: 50%;
   padding: 20px;
+
   border-radius: 5px;
   border-right:1px solid var(--ques-text);
   width: 800px;
@@ -32,102 +15,79 @@
 }
 .problemStatement::-webkit-scrollbar {
   display: none;  /* Hide scrollbar for webkit browsers */
+
 }
 
-.questionStatement pre,p{
-  color: var(--ques-text);
-}
-.solutionEditor{
-  min-width: 650px;
-  gap: 10px;
-  margin-top: 10px;
+.solutionEditor {
+  width: 50%;
+  padding: 20px;
   display: flex;
   flex-direction: column;
+  background-color: var(--editor-bg-color);
 }
 
-.solutionEditor .headers{
+.headers {
   display: flex;
-  gap: 30px;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
-.headers .active{
-  background-color: rgb(54, 54, 120);
-}
-select{
-  width: 100px;
-}
-.button{
-  background-color: rgb(79, 67, 249);
+
+.button {
+  padding: 10px 15px;
+  background-color: #007bff;
   color: white;
-  border-radius: 8px;
+  border: none;
   cursor: pointer;
-  padding: 5px 15px;
 }
-.button:hover{
-  background-color: rgb(54, 54, 120);
+
+.button.show {
+  background-color: #0056b3;
 }
- .button.show{
-  background-color: rgb(54, 54, 120);
-}
-.icon{
-  color: var(--ques-text);
-}
-.bookmarkIcon{
-  color: rgb(79, 67, 249); ;
-}
-.solutionInput{
-  height: 100%;
-  /* width: 650px; */
-  resize: none;
-  background-color:var(--practice-background);
-  border: 1px solid var(--ques-text);
-  border-bottom: none;
-  color: var(--ques-text);
-  overflow-x: auto;
-}
-pre{
-  padding: 0;
-}
+
 .solutionsList {
-  height: 100%;
-  max-width: 650px;
+  flex-grow: 1;
   overflow-y: auto;
-  margin-top: 10px;
-  padding: 10px;
-  border: 1px solid var(--ques-text);
-  border-radius: 4px;
 }
-.solutionsList::-webkit-scrollbar {
-  display: none;  /* Hide scrollbar for webkit browsers */
-}
+
 .solutionItem {
   margin-bottom: 10px;
+  border: 1px solid #ccc;
   padding: 10px;
-  border: 1px solid var(--ques-text);
-  border-radius: 4px;
+  background-color: var(--item-bg-color);
 }
 
 .solutionHeader {
-  cursor: pointer;
   display: flex;
   justify-content: space-between;
-}
-.solutionHeader:hover{
-  color: #5ab8ee;
+  align-items: center;
+  cursor: pointer;
 }
 
 .solutionContent {
-  max-height: 0;
-  overflow: auto;
-  transition: max-height 0.5s ease-in-out;
-}
-
-.solutionContent::-webkit-scrollbar {
-  display: none;  /* Hide scrollbar for webkit browsers */
+  display: none;
 }
 
 .solutionContent.show {
-  max-height: 600px; /* Adjust as needed */
+  display: block;
 }
+
+.solutionInput {
+  flex-grow: 1;
+  padding: 10px;
+  background-color: var(--input-bg-color);
+  color: var(--input-text-color);
+  border: none;
+  resize: none;
+  height: calc(100vh - 100px); /* Adjust height as needed */
+}
+
+.comments {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: var(--comments-bg-color);
+  color: var(--comments-text-color);
+}
+
 
 
 
@@ -181,4 +141,5 @@ textarea[name="commentInput"] {
   resize: none;
   background-color:var(--practice-background);
   color: var(--ques-text);
+
 }
