@@ -4,13 +4,12 @@ import 'react-calendar/dist/Calendar.css';
 import axios from 'axios';
 import './Home.css';
 
-const HomePage = () => {
+const Home = () => {
   const [upcomingContests, setUpcomingContests] = useState([]);
   const [recentlyCompletedContests, setRecentlyCompletedContests] = useState([]);
   const [value, setValue] = useState(new Date());
   const [loading, setLoading] = useState(true);
-
-
+  const [selectedContest, setSelectedContest] = useState(null);
   const [selectedDateContests, setSelectedDateContests] = useState([]);
 
   useEffect(() => {
@@ -110,4 +109,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default Home;

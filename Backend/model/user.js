@@ -35,7 +35,7 @@ const userSchema = mongoose.Schema({
       codeforceshandles:{
         type:[String]
       }
-      
+
 })
 
 const User = mongoose.model('User', userSchema);
